@@ -1,0 +1,3 @@
+protobuf==3.19.*
+keras==2.6
+tensorforce

@@ -33,3 +33,6 @@ class RobotInterface:
     def right(self):
         raise NotImplementedError("Method right not implemented")
 
+
+    def stop(self):
+        raise NotImplementedError("Method stop not implemented")

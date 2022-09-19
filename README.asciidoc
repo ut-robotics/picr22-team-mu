@@ -1,0 +1,53 @@
+:toc: left
+
+= Team "Väike My" in PiCR 2022/23
+
+== Blog
+
+=== September
+==== 1st
+*Michelle*, *Rasmus*, *Leonid*: Introduction to course. Everybody 8h
+
+==== 3rd
+*Michelle*, *Rasmus*, *Leonid*: Boot camp day 1. Everybody 8h
+
+==== 4th
+*Michelle*, *Rasmus*, *Leonid*: Boot camp day 1. Everybody 8h
+
+==== 5th
+*Rasmus*: Setting up virtual environment for programming. 0.5h
+
+*Michelle*, *Rasmus*, *Leonid*: Lab training. 1h 
+
+==== 8th
+*Michelle*: Reading documentation and preparing. 1h
+
+==== 10th
+*Leonid*: First wheel drawing. 2h
+
+==== 11th
+*Leonid*: Messing with wheel tolerances in PETG. 2h
+
+*Michelle*: Soldering a lot of wires. 3h
+
+*Michelle*, *Rasmus*, *Leonid*: Meeting, discussed requirements for the robot. 1.5h
+
+=== 12th
+*Rasmus*: Working on image detection and robot classes. 1.5h
+
+*Michelle*: Putting everything together, fixing some wires and testing wheels. 1.5h
+
+
+==== 14th
+*Leonid*: Printed first wheel out of PETG. 2h
+
+==== 15th
+*Leonid*: Adjusted tolerances and printed out of PLA. 1.5h
+
+==== 16th
+*Leonid*: Manufactured additional 2 wheels out of PLA. 2h
+
+==== 19th
+*Leonid*: Finished first design of motor mounts. 2h
+
+*Rasmus*, *Leonid*: Presenting progress so far. 1.5h

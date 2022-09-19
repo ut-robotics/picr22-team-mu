@@ -32,7 +32,7 @@
 
 *Michelle*, *Rasmus*, *Leonid*: Meeting, discussed requirements for the robot. 1.5h
 
-=== 12th
+==== 12th
 *Rasmus*: Working on image detection and robot classes. 1.5h
 
 *Michelle*: Putting everything together, fixing some wires and testing wheels. 1.5h

@@ -5,49 +5,70 @@
 == Blog
 
 === September
-==== 1st
-*Michelle*, *Rasmus*, *Leonid*: Introduction to course. Everybody 8h
 
-==== 3rd
-*Michelle*, *Rasmus*, *Leonid*: Boot camp day 1. Everybody 8h
+[cols="1,1,1,1"]
+|===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+|01.09
+|Introduction to course. 8h
+|Introduction to course. 8h
+|Introduction to course. 8h
 
-==== 4th
-*Michelle*, *Rasmus*, *Leonid*: Boot camp day 1. Everybody 8h
+|03.09
+|Boot camp day 1. 8h
+|Boot camp day 1. 8h
+|Boot camp day 1. 8h
 
-==== 5th
-*Rasmus*: Setting up virtual environment for programming. 0.5h
+|04.09
+|Boot camp day 2. 8h
+|Boot camp day 2. 8h
+|Boot camp day 2. 8h
 
-*Michelle*, *Rasmus*, *Leonid*: Lab training. 1h 
+|05.09
+|Lab training. 1h
+|Lab training. 1h. Setting up virtual environment for programming. 0.5h
+|Lab training. 1h
 
-==== 8th
-*Michelle*: Reading documentation and preparing. 1h
+|08.09
+|Reading documentation and preparing. 1h
+|
+|
 
-==== 10th
-*Leonid*: First wheel drawing. 2h
+|10.09
+|
+|
+|First wheel drawing. 2h
 
-==== 11th
-*Leonid*: Messing with wheel tolerances in PETG. 2h
+|11.09
+|Soldering a lot of wires. 3h. Meeting, discussed requirements for the robot. 1.5h
+|Meeting, discussed requirements for the robot. 1.5h
+|Messing with wheel tolerances in PETG. 2h. Meeting, discussed requirements for the robot. 1.5h
 
-*Michelle*: Soldering a lot of wires. 3h
+|12.09
+|Putting everything together, fixing some wires and testing wheels. 1.5h
+|Working on image detection and robot classes. 1.5h
+|
 
-*Michelle*, *Rasmus*, *Leonid*: Meeting, discussed requirements for the robot. 1.5h
+|14.09
+|
+|
+|Printed first wheel out of PETG. 2h
 
-==== 12th
-*Rasmus*: Working on image detection and robot classes. 1.5h
+|15.09
+|
+|
+|Adjusted tolerances and printed out of PLA. 1.5h
 
-*Michelle*: Putting everything together, fixing some wires and testing wheels. 1.5h
+|16.09
+|
+|
+|Manufactured additional 2 wheels out of PLA. 2h
 
-
-==== 14th
-*Leonid*: Printed first wheel out of PETG. 2h
-
-==== 15th
-*Leonid*: Adjusted tolerances and printed out of PLA. 1.5h
-
-==== 16th
-*Leonid*: Manufactured additional 2 wheels out of PLA. 2h
-
-==== 19th
-*Leonid*: Finished first design of motor mounts. 2h
-
-*Rasmus*, *Leonid*: Presenting progress so far. 1.5h
+|19.09
+|
+|Presenting progress so far. 1.5h
+|Finished first design of motor mounts. 2h. Presenting progress so far. 1.5h
+|===

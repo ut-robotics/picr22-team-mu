@@ -1,8 +1,10 @@
 from robotInterface import RobotInterface
+import serial
 
 class Robot(RobotInterface):
     def __init__(self):
         super().__init__()
+        self.ser = serial.Serial('/dev/ttyACM0')
 
 
     def forward(self):
@@ -31,3 +33,11 @@ class Robot(RobotInterface):
 
     def right(self):
         pass
+
+
+    def move(self):
+        self.ser.write(bytes(bytearray.fromhex('100010001000000000AAAA')))
+
+if __name__ == "__main__":
+    r = Robot()
+    r.move()

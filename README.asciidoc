@@ -13,9 +13,9 @@
 |*Rasmus*
 |*Leonid*
 |01.09
-|Introduction to course. 8h
-|Introduction to course. 8h
-|Introduction to course. 8h
+|Introduction to course. 1.5h
+|Introduction to course. 1.5h
+|Introduction to course. 1.5h
 
 |03.09
 |Boot camp day 1. 8h
@@ -71,4 +71,36 @@
 |
 |Presenting progress so far. 1.5h
 |Finished first design of motor mounts. 2h. Presenting progress so far. 1.5h
+
+|26.09
+|Assembling the robot. 3h
+|
+|Assembling the robot. 3h
+
+|27.09
+|
+|
+|Designing in CAD 3h.
+
+|28.09
+|
+|
+|Designing in CAD 3h.
+
+|29.09
+|
+|
+|Designing in CAD 3h.
+|===
+
+=== October
+
+10-12h cad 
+
+[cols="1,1,1,1"]
+|===
+|02.10
+|Started with electronics schematics. 2h
+|
+|
 |===

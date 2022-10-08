@@ -1,0 +1,106 @@
+:toc: left
+
+= Team "Väike My" in PiCR 2022/23
+
+== Blog
+
+=== September
+
+[cols="1,1,1,1"]
+|===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+|01.09
+|Introduction to course. 1.5h
+|Introduction to course. 1.5h
+|Introduction to course. 1.5h
+
+|03.09
+|Boot camp day 1. 8h
+|Boot camp day 1. 8h
+|Boot camp day 1. 8h
+
+|04.09
+|Boot camp day 2. 8h
+|Boot camp day 2. 8h
+|Boot camp day 2. 8h
+
+|05.09
+|Lab training. 1h
+|Lab training. 1h. Setting up virtual environment for programming. 0.5h
+|Lab training. 1h
+
+|08.09
+|Reading documentation and preparing. 1h
+|
+|
+
+|10.09
+|
+|
+|First wheel drawing. 2h
+
+|11.09
+|Soldering a lot of wires. 3h. Meeting, discussed requirements for the robot. 1.5h
+|Meeting, discussed requirements for the robot. 1.5h
+|Messing with wheel tolerances in PETG. 2h. Meeting, discussed requirements for the robot. 1.5h
+
+|12.09
+|Putting everything together, fixing some wires and testing wheels. 1.5h
+|Working on image detection and robot classes. 1.5h
+|
+
+|14.09
+|
+|
+|Printed first wheel out of PETG. 2h
+
+|15.09
+|
+|
+|Adjusted tolerances and printed out of PLA. 1.5h
+
+|16.09
+|
+|
+|Manufactured additional 2 wheels out of PLA. 2h
+
+|19.09
+|
+|Presenting progress so far. 1.5h
+|Finished first design of motor mounts. 2h. Presenting progress so far. 1.5h
+
+|26.09
+|Assembling the robot. 3h
+|
+|Assembling the robot. 3h
+
+|27.09
+|
+|
+|Designing in CAD 3h.
+
+|28.09
+|
+|Programming 1h.
+|Designing in CAD 3h.
+
+|29.09
+|
+|
+|Designing in CAD 3h.
+|===
+
+=== October
+
+10-12h cad 
+
+[cols="1,1,1,1"]
+|===
+|02.10
+|Started with electronics schematics. 2h
+|
+|
+|===

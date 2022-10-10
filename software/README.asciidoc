@@ -1,0 +1,5 @@
+= How to connect VNC
+
+. Ava SSH ühendus :5901 forwardimisega `ssh -L 5901:localhost:5901 robot@172.17.55.45`
+. Käivita robotis VNC server käsuga `vncserver`
+. Ühendu robotiga kasutades käsku `vncviewer localhost:5901`

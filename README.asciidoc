@@ -107,7 +107,7 @@
 |10.10
 |Designing schematics. 1.5h
 |Mainboard communication, image detection, omniwheel motion. 5h
-|
+|Camera mount design. Lost due to Fusion error. 4h
 
 |15.10
 |Designing schematics. 1.5h

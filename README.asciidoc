@@ -103,4 +103,9 @@
 |Started with electronics schematics. 2h
 |
 |
+
+|10.10
+|
+|Mainboard communication, image detection, omniwheel motion. 5h
+|
 |===

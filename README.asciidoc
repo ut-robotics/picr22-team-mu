@@ -105,7 +105,12 @@
 |
 
 |10.10
-|
+|Designing schematics. 1.5h
 |Mainboard communication, image detection, omniwheel motion. 5h
+|
+
+|15.10
+|Designing schematics. 1.5h
+|
 |
 |===

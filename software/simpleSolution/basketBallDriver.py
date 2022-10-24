@@ -8,8 +8,8 @@ def getBlobDetectorParams():
     blobDetectorParams = cv2.SimpleBlobDetector_Params()
 
     blobDetectorParams.filterByArea = True
-    blobDetectorParams.maxArea = 200000
-    blobDetectorParams.minArea = 0
+    blobDetectorParams.maxArea = 2000000000000000000000
+    blobDetectorParams.minArea = 100
 
     blobDetectorParams.filterByCircularity = False
     blobDetectorParams.maxCircularity = 0
@@ -33,14 +33,17 @@ def otsi_palli(robot):
 def main():
     robot = Robot()
     cap = RealsenseCamera()
-    thresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"))
-    detector = cv2.SimpleBlobDetector_create()
+    ballThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
+    detector = cv2.SimpleBlobDetector_create(getBlobDetectorParams())
+
+    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path="pole.json"), name="Pole")
 
     while True:
         frame = cap.get_color_frame()
         
         frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        thresholded = cv2.inRange(frameHSV, thresholder.getLow(), thresholder.getHigh())
+        frameHSV = cv2.erode(frameHSV, np.ones((3, 3)), iterations=1)
+        thresholded = cv2.inRange(frameHSV, ballThresholder.getLow(), ballThresholder.getHigh())
         thresholded = 255 - thresholded
         cv2.imshow("Thresholded", thresholded)
 
@@ -60,20 +63,42 @@ def main():
                 robot.spinRight()
             else:
                 # robot vaatab palli poole
-                print(kp.size)
-                if kp.size > 45:
-                    robot.stop()
+                if kp.size > 60:
+                    robot.backward()
+                elif kp.size > 45:
+                    poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+                    poleThresholded = 255 - poleThresholded
+                    poleThresholded = cv2.morphologyEx(poleThresholded, cv2.MORPH_OPEN, np.ones((5, 5)))
+                    poleThresholded = cv2.rectangle(poleThresholded, (0, 0), (WIDTH, HEIGHT), (255), 5)
+
+                    cv2.imshow("PoleThresholded", poleThresholded)
+                    poleKeypoints = list(detector.detect(poleThresholded))
+                    frame = cv2.drawKeypoints(frame, poleKeypoints, np.array([]), (255, 255, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+                    poleKeypoints.sort(key=lambda x: -x.size)  #  Suurim keypoint esimeseks
+
+                    if len(poleKeypoints) == 0:
+                        # Ei näe posti, keerleme ümber palli. NB kuidas me aru saame, et mis pool meie post on?
+                        robot.move(-25, 0, 0)
+                    else:
+                        pole = poleKeypoints[0]
+                        pole_x = pole.pt[0]
+                        if (pole_x < WIDTH // 2 - 30):
+                            robot.spinLeft()
+                        elif (pole_x > WIDTH // 2 + 30):
+                            robot.spinRight()
+                        else:
+                            robot.stop() # TODO, siin peaks viskamise tegema
+                            break
                 else:
                     robot.forward()
                 
 
-            print(x_loc)
-
         cv2.imshow("Frame", frame)
-        # print(thresholder.getHigh(), thresholder.getLow())
+        # print(ballThresholder.getHigh(), ballThresholder.getLow())
         if ord('q') == cv2.waitKey(1) & 0xFF:
             break
-    thresholder.save()
+    ballThresholder.save()
+    poleThresholder.save()
 
 
 if __name__ == "__main__":

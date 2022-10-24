@@ -117,7 +117,7 @@ class FileThresholder(Thresholder):
 
 
 class EditableThresholder(Thresholder):
-    def __init__(self, mode="rgb", fileThresholder: FileThresholder = None):
+    def __init__(self, mode="rgb", fileThresholder: FileThresholder = None, name = "Thresholder"):
         super().__init__(mode)
         self.fileThresholder = fileThresholder
         if fileThresholder == None:
@@ -127,13 +127,13 @@ class EditableThresholder(Thresholder):
             self.low = fileThresholder.getLow()
             self.high = fileThresholder.getHigh()
 
-        cv2.namedWindow("Thresholding")
-        cv2.createTrackbar(f"low {self.mode[0].upper()}", "Thresholding", self.low[0], 255, lambda x: self.changeValue("l", 0, x))
-        cv2.createTrackbar(f"low {self.mode[1].upper()}", "Thresholding", self.low[1], 255, lambda x: self.changeValue("l", 1, x))
-        cv2.createTrackbar(f"low {self.mode[2].upper()}", "Thresholding", self.low[2], 255, lambda x: self.changeValue("l", 2, x))
-        cv2.createTrackbar(f"high {self.mode[0].upper()}", "Thresholding", self.high[0], 255, lambda x: self.changeValue("h", 0, x))
-        cv2.createTrackbar(f"high {self.mode[1].upper()}", "Thresholding", self.high[1], 255, lambda x: self.changeValue("h", 1, x))
-        cv2.createTrackbar(f"high {self.mode[2].upper()}", "Thresholding", self.high[2], 255, lambda x: self.changeValue("h", 2, x))
+        cv2.namedWindow(name)
+        cv2.createTrackbar(f"low {self.mode[0].upper()}", name, self.low[0], 255, lambda x: self.changeValue("l", 0, x))
+        cv2.createTrackbar(f"low {self.mode[1].upper()}", name, self.low[1], 255, lambda x: self.changeValue("l", 1, x))
+        cv2.createTrackbar(f"low {self.mode[2].upper()}", name, self.low[2], 255, lambda x: self.changeValue("l", 2, x))
+        cv2.createTrackbar(f"high {self.mode[0].upper()}", name, self.high[0], 255, lambda x: self.changeValue("h", 0, x))
+        cv2.createTrackbar(f"high {self.mode[1].upper()}", name, self.high[1], 255, lambda x: self.changeValue("h", 1, x))
+        cv2.createTrackbar(f"high {self.mode[2].upper()}", name, self.high[2], 255, lambda x: self.changeValue("h", 2, x))
 
 
     def getLow(self):

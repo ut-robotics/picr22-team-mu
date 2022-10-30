@@ -83,9 +83,9 @@ def main():
                         pole = poleKeypoints[0]
                         pole_x = pole.pt[0]
                         if (pole_x < WIDTH // 2 - 30):
-                            robot.spinLeft()
+                            robot.move(-25, 0, 0)
                         elif (pole_x > WIDTH // 2 + 30):
-                            robot.spinRight()
+                            robot.move(-25, 0, 0)
                         else:
                             robot.stop() # TODO, siin peaks viskamise tegema
                             break

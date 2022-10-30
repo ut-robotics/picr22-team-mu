@@ -170,8 +170,13 @@ class EditableThresholder(Thresholder):
         
 
 def main():
-    e = EditableThresholder(fileThresholder=FileThresholder(path="programming/simpleSolution/thres.json"))
+    e = EditableThresholder(fileThresholder=FileThresholder(path="thres.json"))
+    cap = RealsenseCamera()
     while True:
+        frame = cap.get_color_frame()
+        frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
+        cv2.imshow("Window", frameHSV)
         if cv2.waitKey(1) == ord('q') & 0xFF:
             e.save()
             break

@@ -13,9 +13,9 @@
 |*Rasmus*
 |*Leonid*
 |01.09
-|Introduction to course. 8h
-|Introduction to course. 8h
-|Introduction to course. 8h
+|Introduction to course. 1.5h
+|Introduction to course. 1.5h
+|Introduction to course. 1.5h
 
 |03.09
 |Boot camp day 1. 8h
@@ -71,4 +71,76 @@
 |
 |Presenting progress so far. 1.5h
 |Finished first design of motor mounts. 2h. Presenting progress so far. 1.5h
+
+|26.09
+|Assembling the robot. 3h
+|
+|Assembling the robot. 3h
+
+|27.09
+|
+|
+|Designing in CAD 3h.
+
+|28.09
+|
+|Programming 1h.
+|Designing in CAD 3h.
+
+|29.09
+|
+|
+|Designing in CAD 3h.
+|===
+
+=== October
+
+10-12h cad 
+
+[cols="1,1,1,1"]
+|===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+
+|02.10
+|Started with electronics schematics. 2h
+|
+|
+
+|10.10
+|Designing schematics. 1.5h
+|Mainboard communication, image detection, omniwheel motion. 5h
+|Camera mount design. Lost due to Fusion error. 4h
+
+|15.10
+|Designing schematics. 1.5h
+|
+|
+
+|23.10
+|Electronics design. 4h
+|
+|
+
+|24.10
+|Electronics design. 1.5h
+|Programming. 1.5h
+|Design of thrower. 1.5h
+
+|28.10
+|Thrower motor, bottom plate. 3h
+|
+|Fabrication of test robot thrower. 1.5h
+
+|30.10
+|Electronics design. 5h
+|Measuring thrower. 2.5h
+|Measuring thrower. 2.5h
+
+|31.10
+|Electronics design. 5h
+|Reinstalling OS, configure. 3h
+|Movement and vision math. 1.5h
 |===

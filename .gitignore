@@ -3,3 +3,9 @@
 *.json
 .idea/
 *.html
+<<<<<<< HEAD
+=======
+ansible/
+.gitignore
+Makefile
+>>>>>>> documentation

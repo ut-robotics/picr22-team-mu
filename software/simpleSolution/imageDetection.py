@@ -22,7 +22,7 @@ class RealsenseCamera:
                 depth_framerate = 30,
                 exposure = 200, 
                 white_balace = 3500,
-                depth_enabled = False):
+                depth_enabled = True):
         
         self.rgb_width = rgb_width
         self.rgb_height = rgb_height
@@ -73,7 +73,7 @@ class RealsenseCamera:
         frames = self.pipeline.wait_for_frames()
         if aligned:
             frames = self.align.process(frames)
-        return np.asanyarray(frames.get_color_frame().get_data()), np.asanyarray(frames.get_depth_frame().get_data())
+        return np.asanyarray(frames.get_color_frame().get_data()), frames.get_depth_frame()
 
 
 class Thresholder:

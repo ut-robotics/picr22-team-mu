@@ -1,6 +1,5 @@
 import serial
 import struct
-import time
 
 class Robot:
     def __init__(self):
@@ -74,5 +73,9 @@ class Robot:
 
 
 if __name__ == "__main__":
+    import time
     r = Robot()
-    r.orbit(1, 20 / 32767, forward=False, left=False)
+    # r.orbit(1, 20 / 32767, forward=False, left=False)
+    startTime = time.time()
+    while time.time() - startTime < 2:
+        r.move(-15, -15, -15) # liigub paremale

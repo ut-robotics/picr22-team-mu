@@ -64,30 +64,28 @@ def mapToMax(s1, s2, s3, maxVal):
     return int(s1 * maxVal / curMax), int(s2 * maxVal / curMax), int(s3 * maxVal / curMax)
 
 
-def orbitLeft(robot, maxVal):
+def orbitLeft(robot, maxVal=35, a=0.75):
     # speed1 - tagumine
     # speed2 - parem
     # speed3 - vasak
+    # -35, 4, 4
     
     # liikumine vasakule
     # NB TODO Vajab testimist ja kalibreerimist, proovi hiljem uuesti
-    return
     s = [-1, 0.5, 0.5]
     or_s = [-1, -1, -1]
     
-    a = 0.5
     s1, s2, s3 = [((s[i] * a) + (or_s[i] * (1 - a)))for i in range(len(s))]
     s1, s2, s3 = mapToMax(s1, s2, s3, maxVal)
     robot.move(s1, s2, s3)
 
 
-def oribtRight(robot, maxVal):
+def oribtRight(robot, maxVal=35, a=0.75):
     # NB TODO Vajab testimist ja kalibreerimist, proovi hiljem uuesti
-    return
+    # 35, -4, -4
     s = [1, -0.5, -0.5]
     or_s = [1, 1, 1]
     
-    a = 0.5
     s1, s2, s3 = [((s[i] * a) + (or_s[i] * (1 - a)))for i in range(len(s))]
     s1, s2, s3 = mapToMax(s1, s2, s3, maxVal)
     robot.move(s1, s2, s3)
@@ -108,81 +106,88 @@ def main():
     poleDetector = cv2.SimpleBlobDetector_create(getPoleBlobDetectorParams())
     prevTime = time.time()
     
+    STATE = "BALL" # , "FINAL"
+
     while True:
         try:
+            print(STATE)
             frame, depth_frame = cap.get_frames()
             newTime = time.time()
             print(f"FPS: {round(1 / (newTime - prevTime), 2)}")
             prevTime = newTime
             
             frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            thresholded = cv2.inRange(frameHSV, ballThresholder.getLow(), ballThresholder.getHigh())
-            thresholded = 255 - thresholded
-            # thresholded = rect(thresholded)
-            cv2.imshow("Thresholded", thresholded)
-
-            keypoints = list(ballDetector.detect(thresholded))
-            keypoints.sort(key=lambda x: -x.size)  #  Suurim keypoint esimeseks
-
-            frame = cv2.drawKeypoints(frame, keypoints, np.array([]), (0, 255, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
             
-            if len(keypoints) == 0:
-                robot.setSpeed(10 / 32767)
-                robot.spinLeft()
-            else:
-                kp = keypoints[0]
-                if kp.size < 40:
-                    x_loc = kp.pt[0]
-                    
-                    # otse liikumine
-                    s1 = 0
-                    s2 = 1
-                    s3 = -1
+            if (STATE == "BALL"):
+                thresholded = cv2.inRange(frameHSV, ballThresholder.getLow(), ballThresholder.getHigh())
+                thresholded = 255 - thresholded
+                # thresholded = rect(thresholded)
+                cv2.imshow("Thresholded", thresholded)
 
-                    err = -P_const * (x_loc - (WIDTH / 2))
-                    s1 += err
-                    s2 += err
-                    s3 += err
+                keypoints = list(ballDetector.detect(thresholded))
+                keypoints.sort(key=lambda x: -x.size)  #  Suurim keypoint esimeseks
 
-                    s1, s2, s3 = mapToMax(s1, s2, s3, 20)
-
-                    # speed1 - tagumine
-                    # speed2 - parem
-                    # speed3 - vasak
-                    robot.move(s1, s2, s3)
-                elif kp.size < 60:
-                    
-                    # have to orbit the ball and get the location of post
-                    
-                    poleThresholded = cv2.inRange(frame, poleThresholder.getLow(), poleThresholder.getHigh())
-                    poleThresholded = 255 - poleThresholded
-                    poleThresholded = rect(poleThresholded)
-                    cv2.imshow("Pole thresholded", thresholded)
-                    
-                    poleKeypoints = list(poleDetector.detect(poleThresholded))
-                    poleKeypoints.sort(key = lambda x: -x.size)  #  Suurim keypoint esimeseks
-
-                    if len(poleKeypoints) == 0:
-                        orbitLeft(robot, 50)
-                    else:
-                        pole_kp = poleKeypoints[0]
-                        pole_x = int(pole_kp.pt[0])
-                        pole_y = int(pole_kp.pt[1])
-                        # TODO, siin vb tahame teha nii, et ta läheb hästi aeglaselt palli poole, kui pall on keskmele lähemal
-                        if pole_x < (WIDTH // 2 - 30):
-                            oribtRight(robot, 20)
-                        elif pole_x >  (WIDTH // 2 + 30):
-                            orbitLeft(robot, 20)
-                        else:
-                            # Sõidame otse palli poole, ilmselt tuleks teha mingi palli keskel hoidmine ka, aga selleks tagumist mootorit vaja
-                            pole_dist = getDistance(depth_frame, (pole_x, pole_y))
-                            throwerSpeed = getThrowerSpeed(pole_dist)
-                            startTime = time.time()
-                            while time.time() - startTime < 3:
-                                robot.move(0, 5, -5, throwerSpeed)
-
+                frame = cv2.drawKeypoints(frame, keypoints, np.array([]), (0, 255, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+                
+                if len(keypoints) == 0:
+                    robot.setSpeed(10 / 32767)
+                    robot.spinLeft()
                 else:
-                    robot.backward()
+                    kp = keypoints[0]
+                    x_loc = kp.pt[0]
+                    if kp.size < 45:                        
+                        # otse liikumine
+                        s1 = 0
+                        s2 = 1
+                        s3 = -1
+
+                        err = -P_const * (x_loc - HALF_WIDTH)
+                        s1 += err
+                        s2 += err
+                        s3 += err
+
+                        s1, s2, s3 = mapToMax(s1, s2, s3, 20)
+
+                        # speed1 - tagumine
+                        # speed2 - parem
+                        # speed3 - vasak
+                        robot.move(s1, s2, s3)
+                    elif kp.size < 60:
+                        # kontrollime et pall oleks keskel
+                        if x_loc < (HALF_WIDTH - 15):
+                            robot.spinLeft()
+                        elif x_loc >  (HALF_WIDTH + 15):
+                            robot.spinRight()
+                        else:
+                            startTime = time.time()
+                            while time.time() - startTime < 2:
+                                robot.move(0, 20, -20)
+                            STATE = "FINAL"
+                    else:
+                        robot.backward()
+            elif STATE == "FINAL":
+                poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+                poleThresholded = 255 - poleThresholded
+                poleThresholded = rect(poleThresholded)
+                cv2.imshow("Pole thresholded", poleThresholded)
+                poleKeypoints = list(poleDetector.detect(poleThresholded))
+                frame = cv2.drawKeypoints(frame, poleKeypoints, np.array([]), (255, 0, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+                if len(poleKeypoints) == 0:
+                    orbitLeft(robot, 15, 0.6)
+                else:
+                    pole_kp = poleKeypoints[0]
+                    x_loc = pole_kp.pt[0]
+                    if x_loc < HALF_WIDTH - 10:
+                        oribtRight(robot, 15, 0.6)
+                    elif x_loc > HALF_WIDTH + 10:
+                        orbitLeft(robot, 15, 0.6)
+                    else:
+                        startTime = time.time()
+                        while time.time() - startTime < 1:
+                            robot.move(0, 20, -20, 1000)
+                        quit(0)
+            else:
+                raise ValueError("Unexpected state")
         except StopIteration as e:
             pass
 
@@ -237,5 +242,9 @@ def thresh():
 
 
 if __name__ == "__main__":
-    thresh()
-    #main()
+    # startTime = time.time()
+    # r = Robot()
+    # while time.time() - startTime < 10:
+    #     oribtRight(r, 35, 0.6)
+    #thresh()
+    main()

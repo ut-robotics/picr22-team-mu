@@ -171,12 +171,12 @@ Fusion 360 link: https://a360.co/3NJoPO6
 |06.11
 |Fixing problems related to footprints 3h
 |Programming 4h
-|
+|Programming 8h
 
 |07.11
 |Helping with mechanics and thinking movement logic 5h
 |Programming 4h
-|
+|Programming 4h
 
 |08.11
 |
@@ -194,7 +194,7 @@ Fusion 360 link: https://a360.co/3NJoPO6
 |
 
 |14.11
-|Finishing schematics 2.5h
+|Finishing schematics. PCB design 4h
 |
 |
 

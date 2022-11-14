@@ -105,8 +105,6 @@ Fusion 360 link: https://a360.co/3NJoPO6
 
 === October
 
-10-12h cad 
-
 [cols="1,1,1,1"]
 |===
 |*Date*
@@ -153,4 +151,51 @@ Fusion 360 link: https://a360.co/3NJoPO6
 |Electronics design. 5h
 |Reinstalling OS, configure. 3h
 |Movement and vision math. 1.5h
+|===
+
+
+=== October
+
+[cols="1,1,1,1"]
+|===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+
+|05.11
+|
+|Programming 5h
+|
+
+|06.11
+|Fixing problems related to footprints 3h
+|Programming 4h
+|
+
+|07.11
+|Helping with mechanics and thinking movement logic 5h
+|Programming 4h
+|
+
+|08.11
+|
+|Programming 6h
+|
+
+|09.11
+|
+|Programming 2h
+|
+
+|10.11
+|Preparations for test competition 2.5h
+|Programming, test competition 2.5h
+|
+
+|14.11
+|Finishing schematics 2.5h
+|
+|
+
 |===

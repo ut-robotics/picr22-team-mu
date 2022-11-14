@@ -191,11 +191,11 @@ Fusion 360 link: https://a360.co/3NJoPO6
 |10.11
 |Preparations for test competition 2.5h
 |Programming, test competition 2.5h
-|
+|Design 0.5h
 
 |14.11
 |Finishing schematics. PCB design 4h
 |
-|
+|Design 2h
 
 |===

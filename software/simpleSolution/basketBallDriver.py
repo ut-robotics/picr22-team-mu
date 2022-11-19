@@ -5,6 +5,49 @@ import numpy as np
 from constants import *
 import time
 
+
+def find_goal_location(thresd, top_width_threshold = 10, bottom_width_threshold = 5, kas_plot_y = False, kas_plot_x = False):
+    if np.sum(255 - thresd[0]) > 255 * top_width_threshold:
+        # #find x coordinate
+        # indecies = np.array(range(len(thresd[0])))
+        # masses = 255-thresd[0]
+        # x_mean = np.sum(masses*indecies)/sum(masses)
+
+
+        # goal_radius = np.sqrt(3)*np.std(masses)
+
+        #find y coordinate
+        y_bottom = 0
+        sums = []
+        for i in range(len(thresd)):
+            sums += [np.sum(255-thresd[i])]
+        for i in range(len(thresd)):
+            if np.sum(255-thresd[i]) < bottom_width_threshold*255:
+                y_bottom = i
+                break
+        
+        if kas_plot_x or kas_plot_y:
+            import matplotlib.pyplot as plt
+
+        if kas_plot_y:
+            plt.plot(range(len(sums)), sums)  
+            plt.scatter([y_bottom], [sums[y_bottom]] , color = "r")
+            plt.show()
+        
+        if kas_plot_x:
+            plt.plot(range(len(thresd[0])), 255-thresd[0])  
+            plt.scatter([np.sum((255-thresd[0])*np.array(range(len(thresd[0]))))/sum((255-thresd[0]))], [255] , color = "r")
+            plt.show()
+        
+        return y_bottom
+    else:
+        return None
+
+
+def getThrowerSpeedYCoord(x, a1 = -2.70683525e+02, a2 = 5.86756139e+01, dx = -4.24677858e-02, c = 1.03808178e+03):
+    return a1/(x-dx) + a2/(x-dx)**2 +c
+
+
 def getBallBlobDetectorParams():
     blobDetectorParams = cv2.SimpleBlobDetector_Params()
 
@@ -32,7 +75,7 @@ def getPoleBlobDetectorParams():
 
     blobDetectorParams.filterByArea = True
     blobDetectorParams.maxArea = 450000
-    blobDetectorParams.minArea = 1500
+    blobDetectorParams.minArea = 1000
 
     blobDetectorParams.filterByCircularity = True
     blobDetectorParams.maxCircularity = 1
@@ -92,11 +135,19 @@ def oribtRight(robot, maxVal=35, a=0.75):
 
 
 def getThrowerSpeed(distance):
-    # TODO, implementeeri see meetod
-    return 1000
+    return int(0.397 * distance + 221)
 
 
-def main():
+def delayCamera(dt, cam):
+    startTime = time.time()
+    while time.time() < startTime + dt:
+        frame, depth_frame = cam.get_frames()
+    
+    lastFrame, depth_frame = cam.get_frames()
+    return lastFrame
+
+
+def main(serverControlled = False):
     robot = Robot()
     cap = RealsenseCamera()
     ballThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
@@ -109,16 +160,33 @@ def main():
     STATE = "BALL" # , "FINAL"
 
     while True:
+        if serverControlled:
+            yield
         try:
-            print(STATE)
+            #print(STATE)
             frame, depth_frame = cap.get_frames()
             newTime = time.time()
-            print(f"FPS: {round(1 / (newTime - prevTime), 2)}")
+            #print(f"FPS: {round(1 / (newTime - prevTime), 2)}")
             prevTime = newTime
             
             frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            
-            if (STATE == "BALL"):
+            if STATE == "POLE_CORRECTION":
+                image = delayCamera(0.25, cap)
+                frameHSV = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+                poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+                poleThresholded = 255 - poleThresholded
+                poleThresholded = rect(poleThresholded)
+                cv2.imshow("Pole thresholded", poleThresholded)
+                poleKeypoints = list(poleDetector.detect(poleThresholded))
+
+                if len(poleKeypoints) == 0:
+                    orbitLeft(robot, 15, 0.57)
+                else:
+                    pass
+                    
+
+            elif (STATE == "BALL"):
                 thresholded = cv2.inRange(frameHSV, ballThresholder.getLow(), ballThresholder.getHigh())
                 thresholded = 255 - thresholded
                 # thresholded = rect(thresholded)
@@ -130,7 +198,7 @@ def main():
                 frame = cv2.drawKeypoints(frame, keypoints, np.array([]), (0, 255, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
                 
                 if len(keypoints) == 0:
-                    robot.setSpeed(10 / 32767)
+                    robot.setSpeed(8 / 32767)
                     robot.spinLeft()
                 else:
                     kp = keypoints[0]
@@ -173,30 +241,58 @@ def main():
                 poleKeypoints = list(poleDetector.detect(poleThresholded))
                 frame = cv2.drawKeypoints(frame, poleKeypoints, np.array([]), (255, 0, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
                 if len(poleKeypoints) == 0:
-                    orbitLeft(robot, 15, 0.6)
+                    orbitLeft(robot, 15, 0.57)
                 else:
                     pole_kp = poleKeypoints[0]
                     x_loc = pole_kp.pt[0]
-                    if x_loc < HALF_WIDTH - 10:
-                        oribtRight(robot, 15, 0.6)
-                    elif x_loc > HALF_WIDTH + 10:
-                        orbitLeft(robot, 15, 0.6)
+                    loc = (int(x_loc), int(pole_kp.pt[0]))
+                    if x_loc < HALF_WIDTH - 8:
+                        oribtRight(robot, 8, 0.57)
+                    elif x_loc > HALF_WIDTH + 8:
+                        orbitLeft(robot, 8, 0.57)
                     else:
+                        robot.move(0, -20, 20, disableFailsafe=1)
+                        delayCamera(0.25, cap)
+                        robot.move(0, 0, 0)
+                        
+                        y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
+                        speed = getThrowerSpeedYCoord(y_coord / HEIGHT)
+                        print(y_coord, speed)
+
+                        # dist = getDistance(depth_frame, loc)
+                        # speed = getThrowerSpeed(dist)
+                        # print(dist, speed)
+                        
                         startTime = time.time()
-                        while time.time() - startTime < 1:
-                            robot.move(0, 20, -20, 1000)
-                        quit(0)
+                        if speed:
+                            while time.time() - startTime < 1:
+                                frame, depth_frame = cap.get_frames()
+                                frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                                poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+                                poleThresholded = 255 - poleThresholded
+                                poleThresholded = rect(poleThresholded)
+                                cv2.imshow("Pole thresholded", poleThresholded)
+                                poleKeypoints = list(poleDetector.detect(poleThresholded))
+                                if len(poleKeypoints) > 0:
+                                    pole_kp = poleKeypoints[0]
+                                    x_loc = pole_kp.pt[0]
+                                    loc = (int(x_loc), int(pole_kp.pt[0]))
+                                    y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
+                                    speed = getThrowerSpeedYCoord(y_coord / HEIGHT)
+                                    print(y_coord, speed)
+                                robot.move(0, 20, -20, int(speed))
+                        STATE = "BALL"
             else:
                 raise ValueError("Unexpected state")
         except StopIteration as e:
             pass
 
         cv2.imshow("Frame", frame)
-        # print(ballThresholder.getHigh(), ballThresholder.getLow())
         if ord('q') == cv2.waitKey(1) & 0xFF:
             break
     ballThresholder.save()
     poleThresholder.save()
+    yield
 
 
 def thresh():
@@ -232,6 +328,7 @@ def thresh():
         frame = cv2.drawKeypoints(frame, poleKeypoints, np.array([]), (255, 0, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         if len(poleKeypoints) > 0:
             frame = cv2.circle(frame, (int(poleKeypoints[0].pt[0]), int(poleKeypoints[0].pt[1])), 3, (255, 255, 0), 1)
+            print(getDistance(depth_frame, (int(poleKeypoints[0].pt[0]), int(poleKeypoints[0].pt[1]))))
         
         cv2.imshow("Frame", frame)
         
@@ -241,10 +338,48 @@ def thresh():
     ballThresholder.save()
 
 
+def competition():
+    cap = RealsenseCamera()
+    
+    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=POLE_FILE), name="Pole")
+    poleDetector = cv2.SimpleBlobDetector_create(getPoleBlobDetectorParams())
+    prevTime = time.time()
+    while True:
+        frame, depth_frame = cap.get_frames()
+        newTime = time.time()
+        #print(f"FPS: {round(1 / (newTime - prevTime), 2)}")
+        prevTime = newTime
+        
+        frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
+        poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+        poleThresholded = 255 - poleThresholded
+        poleThresholded = rect(poleThresholded)
+        cv2.imshow("PoleThresholded", poleThresholded)
+
+        poleKeypoints = list(poleDetector.detect(poleThresholded))
+        frame = cv2.drawKeypoints(frame, poleKeypoints, np.array([]), (255, 0, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+        if (len(poleKeypoints) > 0):
+            pole = poleKeypoints[0]
+            loc = (int(pole.pt[0]), int(pole.pt[1]))
+            frame = cv2.circle(frame, loc, 3, (255, 255, 0), 1)
+            dist = getDistance(depth_frame, loc)
+            y_loc = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
+            if y_loc:
+                print(y_loc)
+                frame = cv2.line(frame, (0, y_loc), (WIDTH, y_loc), (0, 255, 0), 2)
+   
+            cv2.imshow("frame", frame)
+        if ord('q') == cv2.waitKey(1) & 0xFF:
+            break
+    
+
 if __name__ == "__main__":
     # startTime = time.time()
     # r = Robot()
     # while time.time() - startTime < 10:
-    #     oribtRight(r, 35, 0.6)
-    #thresh()
-    main()
+    #     oribtRight(r, 35, 0.57)
+    thresh()
+    #next(main())
+    #competition()

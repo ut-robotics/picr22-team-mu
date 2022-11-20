@@ -69,10 +69,9 @@ class RealsenseCamera:
         return self.depth_enabled
 
     
-    def get_frames(self, aligned = False):
+    def get_frames(self, aligned = True):
         frames = self.pipeline.wait_for_frames()
-        if aligned:
-            frames = self.align.process(frames)
+        frames = self.align.process(frames)
         return np.asanyarray(frames.get_color_frame().get_data()), frames.get_depth_frame()
 
 

@@ -1,4 +1,4 @@
-# import basketBallDriver
+import basketBallDriver
 import socket
 import json
 from robot import Robot
@@ -17,17 +17,17 @@ def fakeGenerator(basket):
 
 
 def getGenerator(robot, basket):
-    # return basketBallDriver.main(True, robot, basket)
-    return fakeGenerator(basket)
+    return basketBallDriver.main(True, robot, basket)
+    # return fakeGenerator(basket)
 
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(0.01)
-        s.bind(("127.0.0.1", 6969))
+        s.bind(("127.0.0.1", 6968))
         s.listen(1)
 
-        robot = Robot("/dev/pts/6")
+        robot = Robot()
 
         while True:
             conn, addr = None, None

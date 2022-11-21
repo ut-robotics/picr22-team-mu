@@ -14,10 +14,10 @@ app.use(bodyParser.json())
 const websocket = require("ws");
 
 const robot = net.createConnection({
-    port: 6969,
+    port: 6968,
     onread: {
         buffer: Buffer.alloc(4 * 1024),
-        callback: (nread, buf) => {}
+        callback: (nread, buf) => { }
     }
 })
 
@@ -51,8 +51,8 @@ wss.on('message', (data) => {
                 manual = true
                 robotSpeeds = [0, 0, 0, 0]
             }
-        } else 
-        throw "Illegal signal"
+        } else
+            throw "Illegal signal"
     } catch {
         console.error(`Didn't understand referee command, ${data.toString()}`)
     }

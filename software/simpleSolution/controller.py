@@ -3,8 +3,7 @@ import socket
 import json
 from robot import Robot
 from enum import Enum
-import multiprocessing
-import sys
+import cv2
 
 
 def fakeGenerator(basket):
@@ -21,7 +20,7 @@ def getGenerator(robot, basket):
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(0.01)
-        s.bind(("127.0.0.1", 6968))
+        s.bind(("127.0.0.1", 6969))
         s.listen(1)
 
         robot = Robot()
@@ -37,27 +36,29 @@ def main():
                     continue
                 break
             print("Got connection")
-            thread = multiprocessing.Process(target=process, args=(robot, 'magenta'))
+            generator = getGenerator(robot, 'magenta')
+            getFrames = False
             while True:
                 try:
                     data = conn.recv(1024)
                     text = data.decode().rstrip()
                     conn.send(b"ack")
-                    if thread.is_alive():
-                        thread.terminate()
+                    getFrames = False
+                    cv2.destroyAllWindows()
                     try:
                         obj = json.loads(text)
                         if 'mode' in obj and 'speeds' in obj:
                             if obj['mode'] == 'manual':
                                 robot.move(obj['speeds'][0], obj['speeds'][1], obj['speeds'][2], obj['speeds'][3])
                             elif obj['mode'] == 'auto' and 'basket' in obj:
-                                thread = multiprocessing.Process(target=process, args=(robot, obj['basket']))
-                                print("Start")
-                                thread.start()
+                                generator = getGenerator(robot, obj['basket'])
+                                next(generator)
+                                getFrames = True
                     except Exception as e:
                         print(e)
                 except socket.timeout:
-                    pass
+                    if getFrames:
+                        next(generator)
                 except Exception as e:
                     print(e)
                     conn.close()

@@ -68,7 +68,7 @@ class Robot:
     # speed3 - vasak
     # motor range - 48-2047
     def move(self, speed1 : int, speed2 : int, speed3 : int, throwerSpeed=0, disableFailsafe=0, delimiter=0xAAAA) -> None:
-        # print(speed1, speed2, speed3, throwerSpeed)
+        print(speed1, speed2, speed3, throwerSpeed)
         self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, throwerSpeed, disableFailsafe, delimiter))
         # self.ser.write(bytes(bytearray.fromhex('100010001000000000AAAA')))
 

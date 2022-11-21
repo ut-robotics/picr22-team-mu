@@ -99,7 +99,11 @@ def rect(frame):
 
 # returns distance in mm
 def getDistance(depthFrame, loc):
-    return depthFrame.get_distance(loc[0], loc[1]) * 1000
+    dist = 0
+    for i in range(-2, 3):
+        for j in range(-2, 3):
+            dist += depthFrame.get_distance(loc[0] + i, loc[1] + j) * 1000
+    return dist / 25
 
 
 def mapToMax(s1, s2, s3, maxVal):
@@ -147,7 +151,7 @@ def delayCamera(dt, cam):
     return lastFrame
 
 
-def main(robot = Robot(), basket = "magenta"):
+def main(controller=False, robot = Robot(), basket = "magenta"):
     print("Basketball driver starting")
     cap = RealsenseCamera()
     ballThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
@@ -160,7 +164,9 @@ def main(robot = Robot(), basket = "magenta"):
     STATE = "BALL" # , "FINAL"
 
     while True:
-        print(STATE)
+        if controller:
+            yield
+        # print(STATE)
         frame, depth_frame = cap.get_frames()
         newTime = time.time()
         #print(f"FPS: {round(1 / (newTime - prevTime), 2)}")
@@ -226,7 +232,7 @@ def main(robot = Robot(), basket = "magenta"):
             else:
                 pole_kp = poleKeypoints[0]
                 x_loc = pole_kp.pt[0]
-                loc = (int(x_loc), int(pole_kp.pt[0]))
+                loc = (int(x_loc), int(pole_kp.pt[1]))
                 if x_loc < HALF_WIDTH - 8:
                     oribtRight(robot, 8, 0.57)
                 elif x_loc > HALF_WIDTH + 8:
@@ -239,6 +245,7 @@ def main(robot = Robot(), basket = "magenta"):
                     y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
                     speed = getThrowerSpeedYCoord(y_coord / HEIGHT)
                     print(y_coord, speed)
+                    print(f"Distance to camera is {getDistance(depth_frame, loc)}")
 
                     # dist = getDistance(depth_frame, loc)
                     # speed = getThrowerSpeed(dist)
@@ -260,7 +267,7 @@ def main(robot = Robot(), basket = "magenta"):
                                 loc = (int(x_loc), int(pole_kp.pt[0]))
                                 y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
                                 speed = getThrowerSpeedYCoord(y_coord / HEIGHT)   # TODO See on katki debuggi pärast
-                                print(y_coord, speed)
+                                # print(y_coord, speed)
                             robot.move(0, 20, -20, int(speed))
                     STATE = "BALL"
         else:
@@ -345,6 +352,7 @@ def competition(basket="magenta"):
             frame = cv2.circle(frame, loc, 3, (255, 255, 0), 1)
             dist = getDistance(depth_frame, loc)
             y_loc = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
+            print(dist)
             if y_loc:
                 print(y_loc)
                 frame = cv2.line(frame, (0, y_loc), (WIDTH, y_loc), (0, 255, 0), 2)

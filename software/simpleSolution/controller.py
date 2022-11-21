@@ -1,13 +1,9 @@
-# import basketBallDriver
 import socket
 import json
 from robot import Robot
 from enum import Enum
-
-
-class Mode(Enum):
-    REMOTE = 0
-    PROGRAM = 1
+import multiprocessing
+import sys
 
 
 def fakeGenerator(basket):
@@ -16,9 +12,12 @@ def fakeGenerator(basket):
         yield
 
 
-def getGenerator(robot, basket):
-    # return basketBallDriver.main(True, robot, basket)
-    return fakeGenerator(basket)
+def process(robot, basket):
+    print("subprocess running")
+    print(robot, basket)
+    import basketBallDriver
+    basketBallDriver.main(robot, basket)
+    print("subprocess ending")
 
 
 def main():
@@ -27,7 +26,7 @@ def main():
         s.bind(("127.0.0.1", 6969))
         s.listen(1)
 
-        robot = Robot("/dev/pts/6")
+        robot = Robot()
 
         while True:
             conn, addr = None, None
@@ -40,30 +39,29 @@ def main():
                     continue
                 break
             print("Got connection")
-            generator = getGenerator(robot, 'magenta')
-            mode = Mode.REMOTE
+            thread = multiprocessing.Process(target=process, args=(robot, 'magenta'))
             while True:
                 try:
                     data = conn.recv(1024)
                     text = data.decode().rstrip()
                     conn.send(b"ack")
-                    if mode != Mode.REMOTE:
-                        generator = None
-                        mode = Mode.REMOTE
+                    if thread.is_alive():
+                        thread.terminate()
                     try:
                         obj = json.loads(text)
                         if 'mode' in obj and 'speeds' in obj:
                             if obj['mode'] == 'manual':
                                 robot.move(obj['speeds'][0], obj['speeds'][1], obj['speeds'][2], obj['speeds'][3])
                             elif obj['mode'] == 'auto' and 'basket' in obj:
-                                mode = Mode.PROGRAM
-                                generator = getGenerator(robot, obj['basket'])
+                                thread = multiprocessing.Process(target=process, args=(robot, obj['basket']))
+                                print("Start")
+                                thread.start()
                     except Exception as e:
                         print(e)
                 except socket.timeout:
-                    if mode == Mode.PROGRAM:
-                        next(generator)
-                except:
+                    pass
+                except Exception as e:
+                    print(e)
                     conn.close()
                     break
 

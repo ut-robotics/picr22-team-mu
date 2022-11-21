@@ -17,7 +17,7 @@ const robot = net.createConnection({
     port: 6969,
     onread: {
         buffer: Buffer.alloc(4 * 1024),
-        callback: (nread, buf) => {}
+        callback: (nread, buf) => { }
     }
 })
 
@@ -51,8 +51,8 @@ wss.on('message', (data) => {
                 manual = true
                 robotSpeeds = [0, 0, 0, 0]
             }
-        } else 
-        throw "Illegal signal"
+        } else
+            throw "Illegal signal"
     } catch {
         console.error(`Didn't understand referee command, ${data.toString()}`)
     }
@@ -62,7 +62,7 @@ setInterval(() => {
     if (manual) {
         robot.write(JSON.stringify({ mode: 'manual', speeds: robotSpeeds }))
     }
-}, 1000)
+}, 100)
 
 
 setSpeeds = (speed, clicked) => {
@@ -77,12 +77,12 @@ setSpeeds = (speed, clicked) => {
             robotSpeeds[1] = -speed
             robotSpeeds[2] = speed
             break
-        case "left":
+        case "right":
             robotSpeeds[0] = speed
             robotSpeeds[1] = -Math.floor(speed / 2)
             robotSpeeds[2] = -Math.floor(speed / 2)
             break
-        case "right":
+        case "left":
             robotSpeeds[0] = -speed
             robotSpeeds[1] = Math.floor(speed / 2)
             robotSpeeds[2] = Math.floor(speed / 2)
@@ -143,6 +143,6 @@ app.put("/api", (req, res) => {
     else return res.status(400).json({ message: "Bad request" })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, 'localhost', () => {
     console.log(`Server listening on port ${PORT}`)
 })

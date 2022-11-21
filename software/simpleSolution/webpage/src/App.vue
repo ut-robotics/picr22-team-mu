@@ -1,18 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-var Motorspeed = ref(0);
-var Throwerspeed = ref(0);
-var startButton = ref("START PROGRAM");
+var Motorspeed = ref(10);
+var Throwerspeed = ref(1000);
 
-const collection = document.getElementsByTagName('button')
-
-setInterval(() => {
-  for (let i = 0; i < collection.length; i++) {
-    if (collection[i].clicked) {
-      console.log("Jou")
-    }
-  }
-}, 50)
+var pressedButton = ref(0);
+var throwerEnabled = ref(false)
 
 function buttonClicked(e, type) {
 
@@ -29,7 +21,7 @@ function buttonClicked(e, type) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          clicked: type,
+          clicked: type == pressedButton.value ? 'stop' : type,
           speed: Motorspeed.value
         })
       })
@@ -42,27 +34,45 @@ function buttonClicked(e, type) {
         },
         body: JSON.stringify({
           clicked: type,
-          speed: Throwerspeed.value
+          speed: throwerEnabled.value ? 0 : Throwerspeed.value
         })
       })
       break;
-    case "START PROGRAM":
-    case "STOP PROGRAM":
+    case "start":
       fetch("/api", {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          clicked: (type == "START PROGRAM") ? "start" : "stop",
+          clicked: type == pressedButton.value ? 'stop' : type,
           speed: 0
         })
       })
-      startButton.value = (type == "START PROGRAM") ? "STOP PROGRAM" : "START PROGRAM"
+      throwerEnabled.value = false
       break;
     default:
       break
   }
+  if (type == "throw") {
+    throwerEnabled.value = !throwerEnabled.value
+    if (pressedButton.value == 'start') {
+      pressedButton.value = 0
+      fetch("/api", {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          clicked: 'stop',
+          speed: 0
+        })
+      })
+    }
+  } else if (pressedButton.value == type)
+    pressedButton.value = 0
+  else
+    pressedButton.value = type
 }
 
 </script>
@@ -71,20 +81,20 @@ function buttonClicked(e, type) {
   <div class="app">
     <div class="arrows">
       <div class="start">
-        <button @click="(e) => buttonClicked(e, startButton)">{{ startButton }}</button>
+        <button :class="{'selectedButton': pressedButton == 'start'}" @click="(e) => buttonClicked(e, 'start')">START PROGRAM</button>
       </div>
       <div class="up">
-        <button @click="(e) => buttonClicked(e, 'spinLeft')">&#8630;</button>
-        <button @click="(e) => buttonClicked(e, 'forward')">&#8593;</button>
-        <button @click="(e) => buttonClicked(e, 'spinRight')">&#8631;</button>
+        <button :class="{'selectedButton': pressedButton == 'spinLeft'}" @click="(e) => buttonClicked(e, 'spinLeft')">&#8630;</button>
+        <button :class="{'selectedButton': pressedButton == 'forward'}" @click="(e) => buttonClicked(e, 'forward')">&#8593;</button>
+        <button :class="{'selectedButton': pressedButton == 'spinRight'}" @click="(e) => buttonClicked(e, 'spinRight')">&#8631;</button>
       </div>
       <div class="middle">
-        <button @click="(e) => buttonClicked(e, 'left')">&#8592;</button>
-        <button @click="(e) => buttonClicked(e, 'throw')">T</button>
-        <button @click="(e) => buttonClicked(e, 'right')">&#8594;</button>
+        <button :class="{'selectedButton': pressedButton == 'left'}" @click="(e) => buttonClicked(e, 'left')">&#8592;</button>
+        <button :class="{'selectedButton': throwerEnabled}" @click="(e) => buttonClicked(e, 'throw')">T</button>
+        <button :class="{'selectedButton': pressedButton == 'right'}" @click="(e) => buttonClicked(e, 'right')">&#8594;</button>
       </div>
       <div class="down">
-        <button @click="(e) => buttonClicked(e, 'backward')">&#8595;</button>
+        <button :class="{'selectedButton': pressedButton == 'backward'}" @click="(e) => buttonClicked(e, 'backward')">&#8595;</button>
       </div>
       <div class="speed">
         <input
@@ -118,6 +128,10 @@ function buttonClicked(e, type) {
   flex-direction: column;
   width: 100%;
   align-items: center;
+}
+
+.selectedButton {
+  background-color: red;
 }
 
 .up,

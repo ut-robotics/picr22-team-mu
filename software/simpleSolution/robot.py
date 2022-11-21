@@ -2,9 +2,9 @@ import serial
 import struct
 
 class Robot:
-    def __init__(self):
+    def __init__(self, device = '/dev/ttyACM0'):
         super().__init__()
-        self.ser = serial.Serial('/dev/ttyACM0')
+        self.ser = serial.Serial(device)
         self.speed = 5 / 32767
 
 
@@ -68,7 +68,7 @@ class Robot:
     # speed3 - vasak
     # motor range - 48-2047
     def move(self, speed1 : int, speed2 : int, speed3 : int, throwerSpeed=0, disableFailsafe=0, delimiter=0xAAAA) -> None:
-        # print(speed1, speed2, speed3)
+        # print(speed1, speed2, speed3, throwerSpeed)
         self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, throwerSpeed, disableFailsafe, delimiter))
         # self.ser.write(bytes(bytearray.fromhex('100010001000000000AAAA')))
 

@@ -147,13 +147,12 @@ def delayCamera(dt, cam):
     return lastFrame
 
 
-def main(serverControlled = False):
-    robot = Robot()
+def main(serverControlled = False, robot = Robot(), basket = "magenta"):
     cap = RealsenseCamera()
     ballThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
     ballDetector = cv2.SimpleBlobDetector_create(getBallBlobDetectorParams())
     
-    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=POLE_FILE), name="Pole")
+    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{basket}.json"), name="Pole")
     poleDetector = cv2.SimpleBlobDetector_create(getPoleBlobDetectorParams())
     prevTime = time.time()
     
@@ -295,12 +294,12 @@ def main(serverControlled = False):
     yield
 
 
-def thresh():
+def thresh(basket = "magenta"):
     cap = RealsenseCamera()
     ballThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
     ballDetector = cv2.SimpleBlobDetector_create(getBallBlobDetectorParams())
     
-    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=POLE_FILE), name="Pole")
+    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{basket}.json"), name="Pole")
     poleDetector = cv2.SimpleBlobDetector_create(getPoleBlobDetectorParams())
     prevTime = time.time()
     while True:
@@ -338,10 +337,10 @@ def thresh():
     ballThresholder.save()
 
 
-def competition():
+def competition(basket="magenta"):
     cap = RealsenseCamera()
     
-    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=POLE_FILE), name="Pole")
+    poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{basket}.json"), name="Pole")
     poleDetector = cv2.SimpleBlobDetector_create(getPoleBlobDetectorParams())
     prevTime = time.time()
     while True:

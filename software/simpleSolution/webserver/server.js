@@ -10,11 +10,6 @@ const ROBOT_NAME = "My"
 
 app.use(express.static(path.join(__dirname, "public")))
 app.use(bodyParser.json())
-app.use((req, res, next) => {
-    console.log(req.originalUrl)
-    console.log(req.body)
-    next()
-})
 
 const websocket = require("ws");
 
@@ -32,6 +27,9 @@ wss.on('error', (data) => {
     console.error(`Couldn't connect with Referee`)
 })
 
+robotSpeeds = [0, 0, 0, 0]
+manual = true
+
 wss.on('message', (data) => {
     try {
         req = JSON.parse(data.toString())
@@ -41,7 +39,8 @@ wss.on('message', (data) => {
                 i = req.targets.indexOf(ROBOT_NAME)
                 if (i != -1 && req.baskets && Array.isArray(req.baskets) && req.baskets.length > i) {
                     const basket = req.baskets[i];
-                    robot.write(JSON.stringify({ mode: "start", basket }))
+                    robot.write(JSON.stringify({ mode: "auto", basket, speeds: [0, 0, 0, 0] }))
+                    manual = false
                 } else {
                     throw "Not about us / bad baskets"
                 }
@@ -49,6 +48,8 @@ wss.on('message', (data) => {
         } else if (req.signal && req.signal === 'stop') {
             if (req.targets && req.targets.includes(ROBOT_NAME)) {
                 robot.write(JSON.stringify({ mode: "stop" }))
+                manual = true
+                robotSpeeds = [0, 0, 0, 0]
             }
         } else 
         throw "Illegal signal"
@@ -56,6 +57,48 @@ wss.on('message', (data) => {
         console.error(`Didn't understand referee command, ${data.toString()}`)
     }
 })
+
+setInterval(() => {
+    if (manual) {
+        robot.write(JSON.stringify({ mode: 'manual', speeds: robotSpeeds }))
+    }
+}, 1000)
+
+
+setSpeeds = (speed, clicked) => {
+    switch (clicked) {
+        case "forward":
+            robotSpeeds[0] = 0
+            robotSpeeds[1] = speed
+            robotSpeeds[2] = -speed
+            break
+        case "backward":
+            robotSpeeds[0] = 0
+            robotSpeeds[1] = -speed
+            robotSpeeds[2] = speed
+            break
+        case "left":
+            robotSpeeds[0] = speed
+            robotSpeeds[1] = -Math.floor(speed / 2)
+            robotSpeeds[2] = -Math.floor(speed / 2)
+            break
+        case "right":
+            robotSpeeds[0] = -speed
+            robotSpeeds[1] = Math.floor(speed / 2)
+            robotSpeeds[2] = Math.floor(speed / 2)
+            break
+        case "spinLeft":
+            robotSpeeds[0] = speed
+            robotSpeeds[1] = speed
+            robotSpeeds[2] = speed
+            break
+        case "spinRight":
+            robotSpeeds[0] = -speed
+            robotSpeeds[1] = -speed
+            robotSpeeds[2] = -speed
+            break
+    }
+}
 
 
 app.put("/api", (req, res) => {
@@ -70,21 +113,27 @@ app.put("/api", (req, res) => {
                 case "spinRight":
                 case "right":
                     if (0 < speed < 50) {
-                        robot.write(JSON.stringify({ mode: req.body.clicked, speed }))
+                        setSpeeds(speed, req.body.clicked)
+                        manual = true
                         return res.status(200).json({ message: "OK" })
                     } else {
                         return res.status(400).json({ message: "Bad speed" })
                     }
                 case "throw":
                     if (0 < speed < 2000) {
-                        robot.write(JSON.stringify({ mode: req.body.clicked, speed }))
+                        robotSpeeds[3] = speed
+                        manual = true
                         return res.status(200).json({ message: "OK" })
                     } else {
                         return res.status(400).json({ message: "Bad speed" })
                     }
                 case "start":
+                    manual = false
+                    robot.write(JSON.stringify({ mode: 'auto', speeds: [0, 0, 0, 0], basket: 'magenta' }))
+                    return res.status(200).json({ message: "OK" })
                 case "stop":
-                    robot.write(JSON.stringify({ mode: req.body.clicked, speed }))
+                    robotSpeeds = [0, 0, 0, robotSpeeds[3]]
+                    manual = true
                     return res.status(200).json({ message: "OK" })
                 default:
                     return res.status(400).json({ message: "Bad clicked" })

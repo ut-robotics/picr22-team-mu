@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 const websocket = require("ws");
 
 const robot = net.createConnection({
-    port: 6969,
+    port: 6968,
     onread: {
         buffer: Buffer.alloc(4 * 1024),
         callback: (nread, buf) => { }

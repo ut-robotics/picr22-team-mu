@@ -1,3 +1,4 @@
+import basketBallDriver
 import socket
 import json
 from robot import Robot
@@ -12,18 +13,15 @@ def fakeGenerator(basket):
         yield
 
 
-def process(robot, basket):
-    print("subprocess running")
-    print(robot, basket)
-    import basketBallDriver
-    basketBallDriver.main(robot, basket)
-    print("subprocess ending")
+def getGenerator(robot, basket):
+    return basketBallDriver.main(True, robot, basket)
+    # return fakeGenerator(basket)
 
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(0.01)
-        s.bind(("127.0.0.1", 6969))
+        s.bind(("127.0.0.1", 6968))
         s.listen(1)
 
         robot = Robot()

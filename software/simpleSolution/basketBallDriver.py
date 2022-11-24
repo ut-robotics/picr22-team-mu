@@ -74,7 +74,7 @@ def getPoleBlobDetectorParams():
     blobDetectorParams = cv2.SimpleBlobDetector_Params()
 
     blobDetectorParams.filterByArea = True
-    blobDetectorParams.maxArea = 450000
+    blobDetectorParams.maxArea = 600000
     blobDetectorParams.minArea = 1000
 
     blobDetectorParams.filterByCircularity = True
@@ -151,6 +151,62 @@ def delayCamera(dt, cam):
     return lastFrame
 
 
+def goForward(cap, robot, poleThresholder, poleDetector):
+    startTime = time.time()
+    s1 = 0
+    s2 = 1
+    s3 = -1
+    while time.time() - startTime < 0.5:
+        frame, depth_frame = cap.get_frames()
+        frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+        poleThresholded = 255 - poleThresholded 
+        poleThresholded = rect(poleThresholded)
+        cv2.imshow("Pole thresholded", poleThresholded)
+        poleKeypoints = list(poleDetector.detect(poleThresholded))
+
+        if len(poleKeypoints) == 0:
+            robot.move(s1, s2, s3)
+        else:
+            x_loc = poleKeypoints[0].pt[0]
+            # otse liikumine
+            s1 = 0
+            s2 = 1
+            s3 = -1
+
+            err = -P_const * (x_loc - HALF_WIDTH)
+            s1 += err
+            s2 += err
+            s3 += err
+
+            s1, s2, s3 = mapToMax(s1, s2, s3, 20)
+
+            # speed1 - tagumine
+            # speed2 - parem
+            # speed3 - vasak
+            robot.move(s1, s2, s3)
+    startTime = time.time()
+    thr = 0
+    while time.time() - startTime < 0.5:
+        frame, depth_frame = cap.get_frames()
+        frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+        poleThresholded = 255 - poleThresholded 
+        poleThresholded = rect(poleThresholded)
+        cv2.imshow("Pole thresholded", poleThresholded)
+        poleKeypoints = list(poleDetector.detect(poleThresholded))
+
+        if len(poleKeypoints) == 0:
+            robot.move(0, 20, -20, thr)
+        else:
+            x_loc = int(poleKeypoints[0].pt[0])
+            y_loc = int(poleKeypoints[0].pt[1])
+            y_coord = find_goal_location(poleThresholded[1:,x_loc - 20 : x_loc + 20])
+            speed = int(getThrowerSpeedYCoord(y_coord / HEIGHT))
+            thr = speed
+            robot.move(0, 20, -20, speed)
+
+
 def main(controller=False, robot = Robot(), basket = "magenta"):
     print("Basketball driver starting")
     cap = RealsenseCamera()
@@ -160,9 +216,16 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
     poleThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{basket}.json"), name="Pole")
     poleDetector = cv2.SimpleBlobDetector_create(getPoleBlobDetectorParams())
     prevTime = time.time()
+
+    oppBasket = None
+    if basket == 'magenta':
+        oppBasket = 'blue'
+    else:
+        oppBasket = 'magenta'
+    oppThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{oppBasket}.json"), name="OPP pole")
     
     STATE = "BALL" # , "FINAL"
-
+    stateStartTime = time.time()
     while True:
         if controller:
             yield
@@ -173,7 +236,23 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
         prevTime = newTime
         
         frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        if (STATE == "BALL"):
+        if STATE == "OPP_BASKET":
+            if time.time() - stateStartTime > 5:
+                STATE = "BALL"
+                stateStartTime = time.time()
+            thresholded = cv2.inRange(frameHSV, oppThresholder.getLow(), oppThresholder.getHigh())
+            thresholded = 255 - thresholded
+            thresholded = rect(thresholded)
+            kps = list(poleDetector.detect(thresholded))
+            if len(kps) == 0:
+                robot.setSpeed(8 / 32767)
+                robot.spinLeft()
+            else:
+                robot.forward()
+        elif (STATE == "BALL"):
+            if time.time() - stateStartTime > 5:
+                STATE = "OPP_BASKET"
+                stateStartTime = time.time()
             thresholded = cv2.inRange(frameHSV, ballThresholder.getLow(), ballThresholder.getHigh())
             thresholded = 255 - thresholded
             # thresholded = rect(thresholded)
@@ -215,12 +294,15 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
                         robot.spinRight()
                     else:
                         startTime = time.time()
-                        while time.time() - startTime < 2:
+                        while time.time() - startTime < 1:
                             robot.move(0, 20, -20)
                         STATE = "FINAL"
                 else:
                     robot.backward()
         elif STATE == "FINAL":
+            if time.time() - stateStartTime > 5:
+                STATE = "BALL"
+                stateStartTime = time.time()
             poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
             poleThresholded = 255 - poleThresholded
             poleThresholded = rect(poleThresholded)
@@ -240,35 +322,36 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
                 else:
                     robot.move(0, -20, 20, disableFailsafe=1)
                     delayCamera(0.25, cap)
-                    robot.move(0, 0, 0)
-                    
-                    y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
-                    speed = getThrowerSpeedYCoord(y_coord / HEIGHT)
-                    print(y_coord, speed)
-                    print(f"Distance to camera is {getDistance(depth_frame, loc)}")
+                    goForward(cap, robot, poleThresholder, poleDetector)
+                    #robot.move(0, 0, 0)
+                    #
+                    #y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
+                    #speed = getThrowerSpeedYCoord(y_coord / HEIGHT)
+                    #print(y_coord, speed)
+                    #print(f"Distance to camera is {getDistance(depth_frame, loc)}")
 
-                    # dist = getDistance(depth_frame, loc)
-                    # speed = getThrowerSpeed(dist)
-                    # print(dist, speed)
-                    
-                    startTime = time.time()
-                    if speed:
-                        while time.time() - startTime < 1:
-                            frame, depth_frame = cap.get_frames()
-                            frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-                            poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
-                            poleThresholded = 255 - poleThresholded
-                            poleThresholded = rect(poleThresholded)
-                            cv2.imshow("Pole thresholded", poleThresholded)
-                            poleKeypoints = list(poleDetector.detect(poleThresholded))
-                            if len(poleKeypoints) > 0:
-                                pole_kp = poleKeypoints[0]
-                                x_loc = pole_kp.pt[0]
-                                loc = (int(x_loc), int(pole_kp.pt[0]))
-                                y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
-                                speed = getThrowerSpeedYCoord(y_coord / HEIGHT)   # TODO See on katki debuggi pärast
-                                # print(y_coord, speed)
-                            robot.move(0, 20, -20, int(speed))
+                    ## dist = getDistance(depth_frame, loc)
+                    ## speed = getThrowerSpeed(dist)
+                    ## print(dist, speed)
+                    #
+                    #startTime = time.time()
+                    #if speed:
+                    #    while time.time() - startTime < 1:
+                    #        frame, depth_frame = cap.get_frames()
+                    #        frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                    #        poleThresholded = cv2.inRange(frameHSV, poleThresholder.getLow(), poleThresholder.getHigh())
+                    #        poleThresholded = 255 - poleThresholded
+                    #        poleThresholded = rect(poleThresholded)
+                    #        cv2.imshow("Pole thresholded", poleThresholded)
+                    #        poleKeypoints = list(poleDetector.detect(poleThresholded))
+                    #        if len(poleKeypoints) > 0:
+                    #            pole_kp = poleKeypoints[0]
+                    #            x_loc = pole_kp.pt[0]
+                    #            loc = (int(x_loc), int(pole_kp.pt[0]))
+                    #            y_coord = find_goal_location(poleThresholded[1:,loc[0] - 20 : loc[0] + 20])
+                    #            speed = getThrowerSpeedYCoord(y_coord / HEIGHT)   # TODO See on katki debuggi pärast
+                    #            # print(y_coord, speed)
+                    #        robot.move(0, 20, -20, int(speed))
                     STATE = "BALL"
         else:
             raise ValueError("Unexpected state")
@@ -367,6 +450,6 @@ if __name__ == "__main__":
     # r = Robot()
     # while time.time() - startTime < 10:
     #     oribtRight(r, 35, 0.57)
-    #thresh()
-    next(main())
+    thresh()
+    #next(main(basket="blue"))
     #competition()

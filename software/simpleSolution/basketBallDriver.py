@@ -151,7 +151,7 @@ def delayCamera(dt, cam):
     return lastFrame
 
 
-def main(controller=False, robot = Robot(), basket = "magenta"):
+def main(controller = False, robot = Robot(), basket = "magenta"):
     print("Basketball driver starting")
     cap = RealsenseCamera()
     ballThresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
@@ -164,9 +164,11 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
     STATE = "BALL" # , "FINAL"
 
     while True:
+        print("TERE")
         if controller:
             yield
         # print(STATE)
+        print("TERE")
         frame, depth_frame = cap.get_frames()
         newTime = time.time()
         #print(f"FPS: {round(1 / (newTime - prevTime), 2)}")
@@ -233,11 +235,7 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
                 pole_kp = poleKeypoints[0]
                 x_loc = pole_kp.pt[0]
                 loc = (int(x_loc), int(pole_kp.pt[1]))
-                if x_loc < HALF_WIDTH - 8:
-                    oribtRight(robot, 8, 0.57)
-                elif x_loc > HALF_WIDTH + 8:
-                    orbitLeft(robot, 8, 0.57)
-                else:
+                if abs(x_loc - HALF_WIDTH) < 6:
                     robot.move(0, -20, 20, disableFailsafe=1)
                     delayCamera(0.25, cap)
                     robot.move(0, 0, 0)
@@ -270,6 +268,13 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
                                 # print(y_coord, speed)
                             robot.move(0, 20, -20, int(speed))
                     STATE = "BALL"
+                else:
+                    err = int((x_loc - HALF_WIDTH) * 0.3)
+                    print(f"err: {err}")
+                    if err < 0:
+                        oribtRight(robot, abs(err), 0.5)
+                    else:
+                        orbitLeft(robot, abs(err), 0.57)
         else:
             raise ValueError("Unexpected state")
 
@@ -367,6 +372,6 @@ if __name__ == "__main__":
     # r = Robot()
     # while time.time() - startTime < 10:
     #     oribtRight(r, 35, 0.57)
-    #thresh()
-    next(main())
+    #thresh("blue")
+    next(main(basket="blue"))
     #competition()

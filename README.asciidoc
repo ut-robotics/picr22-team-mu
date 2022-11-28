@@ -200,8 +200,8 @@ Fusion 360 link: https://a360.co/3NJoPO6
 
 |19.11
 |
-|Programming 6h
-|
+|Programming 6.5h
+|Programming 6.5h
 
 |20.11
 |Robot controller, first look at issues 4h

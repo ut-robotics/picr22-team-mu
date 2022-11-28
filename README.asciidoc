@@ -195,7 +195,37 @@ Fusion 360 link: https://a360.co/3NJoPO6
 
 |14.11
 |Finishing schematics. PCB design 4h
-|
+|Programming 1.25h
 |Design 2h
+
+|19.11
+|
+|Programming 6h
+|
+
+|20.11
+|Robot controller, first look at issues 4h
+|Programming 6.25h
+|
+
+|21.11
+|fixing smaller issues, researching bigger issues 1.5h
+|Programming 6h
+|
+
+|24.11
+|prepping for competition 3h
+|prepping, test competition 3h
+|
+
+|27.11
+|fixing issues 1h
+|
+|
+
+|28.11
+|fixing issues 2h
+|
+|
 
 |===

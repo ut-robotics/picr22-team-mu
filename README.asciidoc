@@ -224,8 +224,69 @@ Fusion 360 link: https://a360.co/3NJoPO6
 |
 
 |28.11
-|fixing issues 2h
+|fixing issues 2h. component placement on pcb and routing subschematics 7.5h
 |
 |
+
+|29.11
+|figuring out how to place isolation and component placement approved by mechanic 7.5h 
+|
+|
+
+|===
+
+=== December
+
+[cols="1,1,1,1"]
+|===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+
+|01.12
+|finishing first version of pcb design 4h
+|
+|finishing design and sending it for grading (7h)
+
+|03.12
+|implementing pcb feedback 7h
+|
+|
+
+|04.12
+|fixing last pcb issues 3.5h  
+|
+|creating CAM, adjusting design. Printing some pieces (6h)
+
+|05.12
+|
+|
+|finalizing robot design based on feedback (3h)
+
+|07.12
+|
+|
+|making adjustments to CAM based on feedback. (1h)
+
+|08.12
+|
+|
+|final CAM adjustments, milling robot pieces. (4.5h)
+
+|09.12
+|
+|
+|cleaning milled pieces, attaching threaded inserts, transfering motors from test robot (6h)
+
+|10.12
+|
+|
+|printing of second thrower iteration, battery holders with battery protectors and battery connectors. Assembly of the chassis and camera mount. (8h)
+
+|11.12
+|figuring out how to attach old electronics to new robot 7.5h
+|Rewriting solution code and cleaning up ugly code. 6h
+|finilizing the assembly, 3D printing of the last pieces. Attaching thrower and camera mount. Attaching electronics, cable management (10h)
 
 |===

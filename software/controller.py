@@ -6,7 +6,7 @@ from enum import Enum
 import cv2
 
 
-def fakeGenerator(basket):
+def fakeGenerator(basket):  # Temporary solver for testing
     while True:
         print("Program", basket)
         yield
@@ -36,7 +36,7 @@ def main():
                     continue
                 break
             print("Got connection")
-            generator = getGenerator(robot, 'magenta')
+            generator = None
             getFrames = False
             while True:
                 try:

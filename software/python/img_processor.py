@@ -4,7 +4,7 @@ from enum import Enum
 
 
 class ThresholderTypes(Enum):
-    OPPONENT = 0
+    OPPONENT_POLE = 0
     OUR_POLE = 1
     BALL = 2
 
@@ -46,7 +46,7 @@ class ImgProcessor:
     def get_keypoints_by_type(self, thres_type):
         if (thres_type == ThresholderTypes.BALL):
             return self.get_keypoints(self.ball_thresholder, self.ball_detector, (0, 255, 0))
-        elif thres_type == ThresholderTypes.OPPONENT:
+        elif thres_type == ThresholderTypes.OPPONENT_POLE:
             return self.get_keypoints(self.opp_thresholder, self.pole_detector, (0, 0, 255))
         elif thres_type == ThresholderTypes.OUR_POLE:
             return self.get_keypoints(self.pole_thresholder, self.pole_detector, (255, 0, 0))

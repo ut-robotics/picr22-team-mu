@@ -53,7 +53,7 @@ class StateHandler:
             self.set_state(State.BALL)
             self.state_start_time = time.time()
         
-        kps_opponent = self.img_processor.get_keypoints_by_type(ThresholderTypes.OPPONENT)
+        kps_opponent = self.img_processor.get_keypoints_by_type(ThresholderTypes.OPPONENT_POLE)
         kps_ball = self.img_processor.get_keypoints_by_type(ThresholderTypes.BALL)
 
         if len(kps_ball) > 0:

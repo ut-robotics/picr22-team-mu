@@ -1,10 +1,13 @@
 import serial
+import serial.tools.list_ports
 import struct
 
 class Robot:
-    def __init__(self, device = '/dev/ttyACM0'):
+    def __init__(self):
         super().__init__()
-        self.ser = serial.Serial(device)
+
+        port = [i[0] for i in serial.tools.list_ports.comports()][0]
+        self.ser = serial.Serial(port)
         self.speed = 5 / 32767
 
 

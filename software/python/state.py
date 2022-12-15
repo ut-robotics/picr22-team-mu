@@ -106,7 +106,7 @@ class StateHandler:
                     self.set_state(State.THROW_GOAL)
                     self.state_start_time = time.time()
             else:
-                self.robot.backward()
+                self.robot.move_backward()
 
 
     def state_throw_to_goal(self):

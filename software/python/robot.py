@@ -39,9 +39,9 @@ class Robot:
     def move_forward(self): # correct
         self.move_omni(0, 1000, 0)
     def spin_right(self): # correct
-        self.move_omni(0, 0, -10)
+        self.move_omni(0, 0, -5)
     def spin_left(self): # correct
-        self.move_omni(0, 0, 10)
+        self.move_omni(0, 0, 5)
 
     # speed1 - tagumine
     # speed2 - parem

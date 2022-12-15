@@ -87,12 +87,18 @@ def get_pole_blob_detector_params():
 
 # returns distance in mm
 def get_distance(depth_frame, loc):
-    return np.sum(depth_frame[loc[0] - 2 : loc[0] + 3, loc[1] - 2 : loc[1] + 3]) / 25
+    area = np.asanyarray(depth_frame.get_data())[loc[1] - 2 : loc[1] + 3, loc[0] - 2 : loc[0] + 3]
+    return np.sum(area) / area.size
 
 
 def map_to_max(s1, s2, s3, max_val):
     cur_max = max(abs(s1), abs(s2), abs(s3))
     return int(s1 * max_val / cur_max), int(s2 * max_val / cur_max), int(s3 * max_val / cur_max)
+
+
+def rect(frame):
+    sh = frame.shape
+    return cv2.rectangle(frame, (0, 0), (sh[1], sh[0]), (255), 1)
 
 
 def orbit_left(robot, max_val=35, a=0.75):
@@ -260,5 +266,5 @@ if __name__ == "__main__":
     # r = Robot()
     # while time.time() - start_time < 10:
     #     oribtRight(r, 35, 0.57)
-    # thresh()
-    next(main(basket="blue"))
+    thresh()
+    # next(main(basket=Basket.BLUE))

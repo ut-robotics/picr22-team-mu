@@ -83,7 +83,7 @@ class Mode(Enum):
 
 class Thresholder:
     def __init__(self, mode):
-        if mode.value not in ['rgb', 'hsv']:
+        if mode not in [Mode.RGB, Mode.HSV]:
             raise ValueError(f"Parameter \"{mode.value}\" is not one of allowed types for mode.")
         self.mode = mode
         

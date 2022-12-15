@@ -73,40 +73,22 @@ class StateHandler:
         keypoints = self.img_processor.get_keypoints_by_type(ThresholderTypes.BALL)
 
         if len(keypoints) == 0:
-            self.robot.spin_left()
+            self.robot.spin_left(2)
         else:
             kp = keypoints[0]
             x_loc = kp.pt[0]
-            if kp.size < 45:                        
-                # otse liikumine
-                s1 = 0
-                s2 = 1
-                s3 = -1
-
-                err = -P_const * (x_loc - HALF_WIDTH)
-                s1 += err
-                s2 += err
-                s3 += err
-
-                s1, s2, s3 = self.map_to_max(s1, s2, s3, 20)
-
-                # speed1 - tagumine
-                # speed2 - parem
-                # speed3 - vasak
-                self.robot.move(s1, s2, s3)
-            elif kp.size < 60:
-                if x_loc < (HALF_WIDTH - 15):
-                    self.robot.spin_left()
-                elif x_loc >  (HALF_WIDTH + 15):
-                    self.robot.spin_right()
-                else:
-                    start_time = time.time()
-                    while time.time() - start_time < 1:
-                        self.robot.move(0, 20, -20)
-                    self.set_state(State.THROW_GOAL)
-                    self.state_start_time = time.time()
+            if x_loc < (HALF_WIDTH - 15):
+                self.robot.spin_left(2)
+            elif x_loc >  (HALF_WIDTH + 15):
+                self.robot.spin_right(2)
             else:
-                self.robot.move_backward()
+                self.robot.stop()
+                quit(0)
+                start_time = time.time()
+                while time.time() - start_time < 1:
+                    self.robot.move(0, 20, -20)
+                self.set_state(State.THROW_GOAL)
+                self.state_start_time = time.time()
 
 
     def state_throw_to_goal(self):

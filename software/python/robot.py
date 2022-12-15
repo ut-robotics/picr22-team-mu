@@ -38,10 +38,12 @@ class Robot:
         self.move_omni(np.pi, 1000, 0)
     def move_forward(self): # correct
         self.move_omni(0, 1000, 0)
-    def spin_right(self): # correct
-        self.move_omni(0, 0, -5)
-    def spin_left(self): # correct
-        self.move_omni(0, 0, 5)
+    def spin_right(self, speed=5): # correct
+        self.move_omni(0, 0, -speed)
+        print("spin right")
+    def spin_left(self, speed=5): # correct
+        print("spin left")
+        self.move_omni(0, 0, speed)
 
     # speed1 - tagumine
     # speed2 - parem
@@ -63,7 +65,7 @@ class Robot:
     # speed2 - parem
     # speed3 - vasak
     # motor range - 48-2047
-    def move(self, speed1 : int, speed2 : int, speed3 : int, thrower_speed=0, disable_failsafe=0, delimiter=0xAAAA) -> None:
+    def move(self, speed3 : int, speed1 : int, speed2 : int, thrower_speed=0, disable_failsafe=0, delimiter=0xAAAA) -> None:
         print(speed1, speed2, speed3, thrower_speed)
         self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, thrower_speed, disable_failsafe, delimiter))
         # self.ser.write(bytes(bytearray.fromhex('100010001000000000AAAA')))

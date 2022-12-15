@@ -17,7 +17,7 @@ const robot = net.createConnection({
   port: 6969,
   onread: {
     buffer: Buffer.alloc(4 * 1024),
-    callback: (nread, buf) => {},
+    callback: (nread, buf) => { },
   },
 });
 
@@ -74,13 +74,13 @@ setSpeeds = (speed, clicked) => {
   switch (clicked) {
     case "forward":
       robotSpeeds[0] = 0;
-      robotSpeeds[1] = speed;
-      robotSpeeds[2] = -speed;
+      robotSpeeds[1] = -speed;
+      robotSpeeds[2] = speed;
       break;
     case "backward":
       robotSpeeds[0] = 0;
-      robotSpeeds[1] = -speed;
-      robotSpeeds[2] = speed;
+      robotSpeeds[1] = speed;
+      robotSpeeds[2] = -speed;
       break;
     case "right":
       robotSpeeds[0] = speed;

@@ -266,5 +266,5 @@ if __name__ == "__main__":
     # r = Robot()
     # while time.time() - start_time < 10:
     #     oribtRight(r, 35, 0.57)
-    thresh()
-    # next(main(basket=Basket.BLUE))
+    # thresh()
+    next(main(basket=Basket.BLUE))

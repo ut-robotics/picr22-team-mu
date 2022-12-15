@@ -4,6 +4,7 @@ import json
 from robot import Robot
 from enum import Enum
 import cv2
+from basket_enum import Basket
 
 
 def fake_generator(basket):  # Temporary solver for testing
@@ -13,7 +14,10 @@ def fake_generator(basket):  # Temporary solver for testing
 
 
 def get_generator(robot, basket):
-    return basket_ball_driver.main(True, robot, basket)
+    if (basket == "blue"):
+        return basket_ball_driver.main(True, robot, Basket.BLUE)
+    else:
+        return basket_ball_driver.main(True, robot, Basket.MAGENTA)
     # return fake_generator(basket)
 
 

@@ -60,7 +60,7 @@ class StateHandler:
             self.set_state(State.BALL)
             self.state_start_time = time.time()
         elif len(kps_opponent) == 0:
-            self.robot.spin_left()
+            self.move_omni(0, 0, 5)
         else:
             self.robot.forward()
     
@@ -73,14 +73,14 @@ class StateHandler:
         keypoints = self.img_processor.get_keypoints_by_type(ThresholderTypes.BALL)
 
         if len(keypoints) == 0:
-            self.robot.spin_left(2)
+            self.move_omni(0, 0, 2)
         else:
             kp = keypoints[0]
             x_loc = kp.pt[0]
             if x_loc < (HALF_WIDTH - 15):
-                self.robot.spin_left(2)
+                self.move_omni(0, 0, 2)
             elif x_loc >  (HALF_WIDTH + 15):
-                self.robot.spin_right(2)
+                self.move_omni(0, 0, -2)
             else:
                 self.robot.stop()
                 quit(0)

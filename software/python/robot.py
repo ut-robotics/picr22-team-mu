@@ -27,24 +27,6 @@ class Robot:
     # 32767 on max valid
     # -32768 on min valid
 
-
-    # portion - turning / driving straight: 1 - spin // 0 - straight
-    
-    def move_left(self): # correct
-        self.move_omni(np.pi/2, 1000, 0, self.motors)
-    def move_right(self): # correct
-        self.move_omni(3*np.pi/2, 1000, 0, self.motors)    
-    def move_backward(self): # 
-        self.move_omni(np.pi, 1000, 0)
-    def move_forward(self): # correct
-        self.move_omni(0, 1000, 0)
-    def spin_right(self, speed=5): # correct
-        self.move_omni(0, 0, -speed)
-        print("spin right")
-    def spin_left(self, speed=5): # correct
-        print("spin left")
-        self.move_omni(0, 0, speed)
-
     # speed1 - tagumine
     # speed2 - parem
     # speed3 - vasak

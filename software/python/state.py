@@ -53,10 +53,13 @@ class StateHandler:
             self.set_state(State.BALL)
             self.state_start_time = time.time()
         
-        kps = self.img_processor.get_keypoints_by_type(ThresholderTypes.BALL)
+        kps_opponent = self.img_processor.get_keypoints_by_type(ThresholderTypes.OPPONENT)
+        kps_ball = self.img_processor.get_keypoints_by_type(ThresholderTypes.BALL)
 
-        if len(kps) == 0:
-            self.robot.set_speed(8 / 32767)
+        if len(kps_ball) > 0:
+            self.set_state(State.BALL)
+            self.state_start_time = time.time()
+        elif len(kps_opponent) == 0:
             self.robot.spin_left()
         else:
             self.robot.forward()
@@ -70,7 +73,6 @@ class StateHandler:
         keypoints = self.img_processor.get_keypoints_by_type(ThresholderTypes.BALL)
 
         if len(keypoints) == 0:
-            self.robot.set_speed(8 / 32767)
             self.robot.spin_left()
         else:
             kp = keypoints[0]

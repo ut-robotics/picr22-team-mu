@@ -86,11 +86,7 @@ def get_pole_blob_detector_params():
 
 # returns distance in mm
 def get_distance(depth_frame, loc):
-    dist = 0
-    for i in range(-2, 3):
-        for j in range(-2, 3):
-            dist += depth_frame.get_distance(loc[0] + i, loc[1] + j) * 1000
-    return dist / 25
+    return np.sum(depth_frame[loc[0] - 2 : loc[0] + 3, loc[1] - 2 : loc[1] + 3]) / 25
 
 
 def map_to_max(s1, s2, s3, max_val):

@@ -8,7 +8,7 @@ import numpy as np
 class State(Enum):
     OPP_BASKET = 0
     BALL = 1
-    FINAL = 2
+    THROW_GOAL = 2
 
 
 class StateHandler:
@@ -40,9 +40,9 @@ class StateHandler:
         if (self.getState() == State.BALL):
             self.state_ball()
         elif (self.getState() == State.OPP_BASKET):
-            self.state_opp_basket()
-        elif (self.getState() == State.FINAL):
-            self.state_final()
+            self.state_go_to_opponent_basket()
+        elif (self.getState() == State.THROW_GOAL):
+            self.state_throw_to_goal()
         else:
             raise Exception("Unexpected state")
         
@@ -58,7 +58,7 @@ class StateHandler:
         self.stateStartTime = time.time()
 
 
-    def state_opp_basket(self):
+    def state_go_to_opponent_basket(self):
         if time.time() - self.stateStartTime > STATE_OVERFLOW_TIME:
             self.setState(State.BALL)
         thresholded = self.createThresImgForBlobDetection(self.oppThresholder)
@@ -117,12 +117,12 @@ class StateHandler:
                     startTime = time.time()
                     while time.time() - startTime < 1:
                         self.robot.move(0, 20, -20)
-                    self.setState(State.FINAL)
+                    self.setState(State.THROW_GOAL)
             else:
                 self.robot.backward()
 
 
-    def state_final(self):
+    def state_throw_to_goal(self):
         if time.time() - self.stateStartTime > 5:
             self.setState(State.BALL)
         thresholded = self.createThresImgForBlobDetection(self.poleThresholder)

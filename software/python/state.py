@@ -141,7 +141,7 @@ class StateHandler:
                 self.orbitLeft(self.robot, 8, 0.57)
             else:
                 self.robot.move(0, -20, 20, disableFailsafe=1)
-                self.delayCamera(0.25, cap)
+                self.delayCamera(0.25, self.cap)
                 self.goForward(self.cap, self.robot, self.poleThresholder, self.poleDetector)
                 self.setState(State.BALL)
 

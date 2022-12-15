@@ -8,9 +8,9 @@ class Robot:
         super().__init__()
         self.speed = 1
         self.motors = [
-            {"r":38, "R":98, "angle": np.pi    },
+            {"r":38, "R":98, "angle": 1/6*np.pi},
             {"r":38, "R":98, "angle": 11/6*np.pi},
-            {"r":38, "R":98, "angle": 1/6*np.pi}
+            {"r":22, "R":98, "angle": np.pi    }
         ]
 
         port = [i[0] for i in serial.tools.list_ports.comports()][0]
@@ -30,32 +30,32 @@ class Robot:
 
     # portion - turning / driving straight: 1 - spin // 0 - straight
     
-    def move_left(self):
-        self.move_omni(np.pi/2, 200, 0, r.motors)
-    def move_right(self):
-        self.move_omni(3*np.pi/2, 200, 0, r.motors)    
-    def move_backward(self):
-        self.move_omni(np.pi, 200, 0, r.motors)
-    def move_forward(self):
-        self.move_omni(0, 200, 0, r.motors)
-    def spin_right(self):
-        self.move_omni(0, 0, 3, r.motors)
-    def spin_left(self):
-        self.move_omni(0, 0, -3, r.motors)
+    def move_left(self): # correct
+        self.move_omni(np.pi/2, 1000, 0, self.motors)
+    def move_right(self): # correct
+        self.move_omni(3*np.pi/2, 1000, 0, self.motors)    
+    def move_backward(self): # 
+        self.move_omni(np.pi, 1000, 0)
+    def move_forward(self): # correct
+        self.move_omni(0, 1000, 0)
+    def spin_right(self): # correct
+        self.move_omni(0, 0, -10)
+    def spin_left(self): # correct
+        self.move_omni(0, 0, 10)
 
     # speed1 - tagumine
     # speed2 - parem
     # speed3 - vasak
     def set_speed(self, speed1 : int, speed2 : int, speed3 : int, throwerSpeed=0, disableFailsafe=0, delimiter=0xAAAA) -> None:
         print(speed1, speed2, speed3)
-        # self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, throwerSpeed, disableFailsafe, delimiter))
+        self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, throwerSpeed, disableFailsafe, delimiter))
         # self.ser.write(bytes(bytearray.fromhex('100010001000000000AAAA')))
 
     # radiaanides!!
-    def move_omni(self, direction: float, velocity: float, turning: float, motors) -> None:      
+    def move_omni(self, direction: float, velocity: float, turning: float) -> None:      
         speed = []        
-        for i in range(len(motors)):
-            speed += [int(-np.sin(motors[i]["angle"] - direction)*(velocity/motors[i]["r"])+(turning*motors[i]["R"]/motors[i]["r"]))]
+        for i in range(len(self.motors)):
+            speed += [int(-np.sin(self.motors[i]["angle"] - direction)*(velocity/self.motors[i]["r"])+(turning*self.motors[i]["R"]/self.motors[i]["r"]))]
         self.set_speed(*speed)
 
     
@@ -73,8 +73,5 @@ if __name__ == "__main__":
     import time
     r = Robot()
     start_time = time.time()
-    while True:
-        #r.orbit(0.5, forward=False, left=False)
-        i = int(input(">"))
-        #r.move(10, 10, 10) # liigub paremale
-        r.move(i, i, i, 0, disable_failsafe=1)
+    while time.time() < start_time + 2:
+        r.move_omni(np.pi/4, 1000, -5)

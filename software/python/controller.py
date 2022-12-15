@@ -1,4 +1,4 @@
-import basketBallDriver
+import basket_ball_driver
 import socket
 import json
 from robot import Robot
@@ -13,7 +13,7 @@ def fake_generator(basket):  # Temporary solver for testing
 
 
 def get_generator(robot, basket):
-    return basketBallDriver.main(True, robot, basket)
+    return basket_ball_driver.main(True, robot, basket)
     # return fake_generator(basket)
 
 

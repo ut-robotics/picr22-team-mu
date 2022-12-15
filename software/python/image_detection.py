@@ -3,6 +3,7 @@ import json
 import numpy as np
 import pyrealsense2 as rs
 import numpy as np
+from enum import Enum
 
 class Camera:
     def __init__(self, id=0):
@@ -75,15 +76,20 @@ class RealsenseCamera:
         return np.asanyarray(frames.get_color_frame().get_data()), frames.get_depth_frame()
 
 
+class Mode(Enum):
+    RGB = "ŕgb"
+    HSV = "hsv"
+
+
 class Thresholder:
     def __init__(self, mode):
-        if mode.lower() not in ['rgb', 'hsv']:
-            raise ValueError(f"Parameter \"{mode}\" is not one of allowed types for mode.")
-        self.mode = mode.lower()
+        if mode.value not in ['rgb', 'hsv']:
+            raise ValueError(f"Parameter \"{mode.value}\" is not one of allowed types for mode.")
+        self.mode = mode
         
 
 class FileThresholder(Thresholder):
-    def __init__(self, path="thres.json", mode = "RGB"):
+    def __init__(self, path="thres.json", mode = Mode.RGB):
         super().__init__(mode)
         self.path = path
         self.reload()
@@ -100,8 +106,8 @@ class FileThresholder(Thresholder):
     def reload(self):
         with open(self.path, 'r') as f:
             fileData = json.load(f)
-            self.high = np.array(fileData[self.mode]["high"])
-            self.low = np.array(fileData[self.mode]["low"])
+            self.high = np.array(fileData[self.mode.value]["high"])
+            self.low = np.array(fileData[self.mode.value]["low"])
                 
     
     def save(self):
@@ -109,14 +115,14 @@ class FileThresholder(Thresholder):
         with open(self.path, 'r') as f:
             current_file = json.load(f)
         
-        current_file[self.mode]["high"] = self.get_high().tolist()
-        current_file[self.mode]["low"] = self.get_low().tolist()
+        current_file[self.mode.value]["high"] = self.get_high().tolist()
+        current_file[self.mode.value]["low"] = self.get_low().tolist()
         with open(self.path, "w") as f:
             json.dump(current_file, f)
 
 
 class EditableThresholder(Thresholder):
-    def __init__(self, mode="rgb", file_thresholder: FileThresholder = None, name = "Thresholder"):
+    def __init__(self, mode=Mode.RGB, file_thresholder: FileThresholder = None, name = "Thresholder"):
         super().__init__(mode)
         self.file_thresholder = file_thresholder
         if file_thresholder == None:
@@ -127,12 +133,12 @@ class EditableThresholder(Thresholder):
             self.high = file_thresholder.get_high()
 
         cv2.namedWindow(name)
-        cv2.createTrackbar(f"low {self.mode[0].upper()}", name, self.low[0], 255, lambda x: self.change_value("l", 0, x))
-        cv2.createTrackbar(f"low {self.mode[1].upper()}", name, self.low[1], 255, lambda x: self.change_value("l", 1, x))
-        cv2.createTrackbar(f"low {self.mode[2].upper()}", name, self.low[2], 255, lambda x: self.change_value("l", 2, x))
-        cv2.createTrackbar(f"high {self.mode[0].upper()}", name, self.high[0], 255, lambda x: self.change_value("h", 0, x))
-        cv2.createTrackbar(f"high {self.mode[1].upper()}", name, self.high[1], 255, lambda x: self.change_value("h", 1, x))
-        cv2.createTrackbar(f"high {self.mode[2].upper()}", name, self.high[2], 255, lambda x: self.change_value("h", 2, x))
+        cv2.createTrackbar(f"low {self.mode.value[0].upper()}", name, self.low[0], 255, lambda x: self.change_value("l", 0, x))
+        cv2.createTrackbar(f"low {self.mode.value[1].upper()}", name, self.low[1], 255, lambda x: self.change_value("l", 1, x))
+        cv2.createTrackbar(f"low {self.mode.value[2].upper()}", name, self.low[2], 255, lambda x: self.change_value("l", 2, x))
+        cv2.createTrackbar(f"high {self.mode.value[0].upper()}", name, self.high[0], 255, lambda x: self.change_value("h", 0, x))
+        cv2.createTrackbar(f"high {self.mode.value[1].upper()}", name, self.high[1], 255, lambda x: self.change_value("h", 1, x))
+        cv2.createTrackbar(f"high {self.mode.value[2].upper()}", name, self.high[2], 255, lambda x: self.change_value("h", 2, x))
 
 
     def get_low(self):
@@ -179,7 +185,7 @@ def main():
         if cv2.waitKey(1) == ord('q') & 0xFF:
             e.save()
             break
-    #    f = FileThresholder(mode="rgb", path="programming/simpleSolution/thres.json")
+    #    f = FileThresholder(mode=Mode.RGB, path="programming/simpleSolution/thres.json")
     #    f.save()
 
 

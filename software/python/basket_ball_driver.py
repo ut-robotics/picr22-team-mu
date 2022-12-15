@@ -1,10 +1,11 @@
 from robot import Robot
-from imageDetection import Camera, EditableThresholder, RealsenseCamera, FileThresholder
+from image_detection import Camera, EditableThresholder, RealsenseCamera, FileThresholder, Mode
 import cv2
 import numpy as np
 from constants import *
 import time
 from state import StateHandler
+from basket_enum import Basket
 
 
 def find_goal_location(thresd, top_width_threshold = 10, bottom_width_threshold = 5, kas_plot_y = False, kas_plot_x = False):
@@ -190,21 +191,21 @@ def go_forward(cap, robot, pole_thresholder, pole_detector):
             robot.move(0, 20, -20, speed)
 
 
-def main(controller=False, robot = Robot(), basket = "magenta"):
+def main(controller=False, robot = Robot(), basket = Basket.MAGENTA):
     print("Basketball driver starting")
     cap = RealsenseCamera()
-    ball_thresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
+    ball_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV), name="Ball")
     ball_detector = cv2.SimpleBlobDetector_create(get_ball_blob_detector_params())
     
-    pole_thresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{basket}.json"), name="Pole")
+    pole_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV, path=f"{basket.value}.json"), name="Pole")
     pole_detector = cv2.SimpleBlobDetector_create(get_pole_blob_detector_params())
 
     opp_basket = None
-    if basket == 'magenta':
-        opp_basket = 'blue'
+    if basket == Basket.MAGENTA:
+        opp_basket = Basket.BLUE
     else:
-        opp_basket = 'magenta'
-    opp_thresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{opp_basket}.json"), name="OPP pole")
+        opp_basket = Basket.MAGENTA
+    opp_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV, path=f"{opp_basket.value}.json"), name="OPP pole")
     
     STATE = StateHandler(cap, robot, opp_thresholder, pole_thresholder, ball_thresholder, ball_detector, pole_detector, map_to_max, orbit_left, orbit_right, delay_camera, go_forward)
     while True:
@@ -220,12 +221,12 @@ def main(controller=False, robot = Robot(), basket = "magenta"):
     yield
 
 
-def thresh(basket = "magenta"):
+def thresh(basket = Basket.MAGENTA):
     cap = RealsenseCamera()
-    ball_thresholder = EditableThresholder("hsv", FileThresholder(mode="hsv"), name="Ball")
+    ball_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV), name="Ball")
     ball_detector = cv2.SimpleBlobDetector_create(get_ball_blob_detector_params())
     
-    pole_thresholder = EditableThresholder("hsv", FileThresholder(mode="hsv", path=f"{basket}.json"), name="Pole")
+    pole_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV, path=f"{basket.value}.json"), name="Pole")
     pole_detector = cv2.SimpleBlobDetector_create(get_pole_blob_detector_params())
     prev_time = time.time()
     while True:

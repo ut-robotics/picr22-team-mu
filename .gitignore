@@ -36,4 +36,4 @@ coverage
 *.sln
 *.sw?
 
-software/simpleSolution/webserver/public/
+software/webserver/public/

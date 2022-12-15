@@ -5,8 +5,8 @@ const net = require("net")
 
 const app = express()
 const PORT = 4200
-const REFEREE_ADDRESS = "ws://localhost:8222"
-const ROBOT_NAME = "My"
+const REFEREE_ADDRESS = "ws://192.168.3.220:8111"
+const ROBOT_NAME = "mu"
 
 app.use(express.static(path.join(__dirname, "public")))
 app.use(bodyParser.json())

@@ -12,8 +12,8 @@ function buttonClicked(e, type) {
     case "forward":
     case "backward":
     case "left":
-    case "spinLeft":
-    case "spinRight":
+    case "spin_left":
+    case "spin_right":
     case "right":
       fetch("/api", {
         method: "PUT",
@@ -84,9 +84,9 @@ function buttonClicked(e, type) {
         <button :class="{'selectedButton': pressedButton == 'start'}" @click="(e) => buttonClicked(e, 'start')">START PROGRAM</button>
       </div>
       <div class="up">
-        <button :class="{'selectedButton': pressedButton == 'spinLeft'}" @click="(e) => buttonClicked(e, 'spinLeft')">&#8630;</button>
+        <button :class="{'selectedButton': pressedButton == 'spin_left'}" @click="(e) => buttonClicked(e, 'spin_left')">&#8630;</button>
         <button :class="{'selectedButton': pressedButton == 'forward'}" @click="(e) => buttonClicked(e, 'forward')">&#8593;</button>
-        <button :class="{'selectedButton': pressedButton == 'spinRight'}" @click="(e) => buttonClicked(e, 'spinRight')">&#8631;</button>
+        <button :class="{'selectedButton': pressedButton == 'spin_right'}" @click="(e) => buttonClicked(e, 'spin_right')">&#8631;</button>
       </div>
       <div class="middle">
         <button :class="{'selectedButton': pressedButton == 'left'}" @click="(e) => buttonClicked(e, 'left')">&#8592;</button>

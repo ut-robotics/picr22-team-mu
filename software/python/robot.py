@@ -81,4 +81,4 @@ if __name__ == "__main__":
         #r.orbit(0.5, forward=False, left=False)
         i = int(input(">"))
         #r.move(10, 10, 10) # liigub paremale
-        r.move(0, 0, 0, i, disableFailsafe=1)
+        r.move(i, i, i, 0, disableFailsafe=1)

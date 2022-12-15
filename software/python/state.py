@@ -12,82 +12,82 @@ class State(Enum):
 
 
 class StateHandler:
-    def __init__(self, cap, robot, oppThresholder, poleThresholder, ballThresholder, ballDetector, poleDetector, mapToMax, orbitLeft, orbitRight, delayCamera, goForward):
+    def __init__(self, cap, robot, opp_thresholder, pole_thresholder, ball_thresholder, ball_detector, pole_detector, map_to_max, orbit_left, orbit_right, delay_camera, go_forward):
         self.cap = cap
         self.robot = robot
-        self.oppThresholder = oppThresholder
-        self.poleThresholder = poleThresholder
-        self.ballThresholder = ballThresholder
-        self.ballDetector = ballDetector
-        self.poleDetector = poleDetector
-        self.setState(State.BALL)
-        self.stateStartTime = time.time()
-        self.mapToMax = mapToMax
-        self.orbitLeft = orbitLeft
-        self.orbitRight = orbitRight
-        self.delayCamera = delayCamera
-        self.goForward = goForward
+        self.opp_thresholder = opp_thresholder
+        self.pole_thresholder = pole_thresholder
+        self.ball_thresholder = ball_thresholder
+        self.ball_detector = ball_detector
+        self.pole_detector = pole_detector
+        self.set_state(State.BALL)
+        self.state_start_time = time.time()
+        self.map_to_max = map_to_max
+        self.orbit_left = orbit_left
+        self.orbit_right = orbit_right
+        self.delay_camera = delay_camera
+        self.go_forward = go_forward
     
 
-    def imgProcessing(self):
+    def img_processing(self):
         frame, depth_frame = self.cap.get_frames()
-        self.frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        self.frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         self.depth_frame = depth_frame
     
 
     def state_handler(self):
-        self.imgProcessing()
-        if (self.getState() == State.BALL):
+        self.img_processing()
+        if (self.get_state() == State.BALL):
             self.state_ball()
-        elif (self.getState() == State.OPP_BASKET):
+        elif (self.get_state() == State.OPP_BASKET):
             self.state_go_to_opponent_basket()
-        elif (self.getState() == State.THROW_GOAL):
+        elif (self.get_state() == State.THROW_GOAL):
             self.state_throw_to_goal()
         else:
             raise Exception("Unexpected state")
         
-        cv2.imshow("Aken", self.frameHSV)
+        cv2.imshow("Aken", self.frame_hsv)
 
 
-    def getState(self):
+    def get_state(self):
         return self.state
 
     
-    def setState(self, state):
+    def set_state(self, state):
         self.state = state
-        self.stateStartTime = time.time()
+        self.state_start_time = time.time()
 
 
     def state_go_to_opponent_basket(self):
-        if time.time() - self.stateStartTime > STATE_OVERFLOW_TIME:
-            self.setState(State.BALL)
-        thresholded = self.createThresImgForBlobDetection(self.oppThresholder)
+        if time.time() - self.state_start_time > STATE_OVERFLOW_TIME:
+            self.set_state(State.BALL)
+        thresholded = self.create_thres_img_for_blob_detection(self.opp_thresholder)
         cv2.imshow("Thresholded", thresholded)
 
-        kps = list(self.poleDetector.detect(thresholded))
+        kps = list(self.pole_detector.detect(thresholded))
 
-        self.frameHSV = cv2.drawKeypoints(self.frameHSV, kps, np.array([]), (0, 255, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        self.frame_hsv = cv2.drawKeypoints(self.frame_hsv, kps, np.array([]), (0, 255, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         if len(kps) == 0:
-            self.robot.setSpeed(8 / 32767)
-            self.robot.spinLeft()
+            self.robot.set_speed(8 / 32767)
+            self.robot.spin_left()
         else:
             self.robot.forward()
     
 
     def state_ball(self):
-        if time.time() - self.stateStartTime > STATE_OVERFLOW_TIME:
-            self.setState(State.OPP_BASKET)
-            self.stateStartTime = time.time()
-        thresholded = self.createThresImgForBlobDetection(self.ballThresholder)
+        if time.time() - self.state_start_time > STATE_OVERFLOW_TIME:
+            self.set_state(State.OPP_BASKET)
+            self.state_start_time = time.time()
+        thresholded = self.create_thres_img_for_blob_detection(self.ball_thresholder)
         cv2.imshow("Thresholded", thresholded)
 
-        keypoints = list(self.ballDetector.detect(thresholded))
+        keypoints = list(self.ball_detector.detect(thresholded))
         keypoints.sort(key=lambda x: -x.size)  #  Biggest ball as first
 
-        self.frameHSV = cv2.drawKeypoints(self.frameHSV, keypoints, np.array([]), (0, 255, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        self.frame_hsv = cv2.drawKeypoints(self.frame_hsv, keypoints, np.array([]), (0, 255, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         if len(keypoints) == 0:
-            self.robot.setSpeed(8 / 32767)
-            self.robot.spinLeft()
+            self.robot.set_speed(8 / 32767)
+            self.robot.spin_left()
         else:
             kp = keypoints[0]
             x_loc = kp.pt[0]
@@ -102,7 +102,7 @@ class StateHandler:
                 s2 += err
                 s3 += err
 
-                s1, s2, s3 = self.mapToMax(s1, s2, s3, 20)
+                s1, s2, s3 = self.map_to_max(s1, s2, s3, 20)
 
                 # speed1 - tagumine
                 # speed2 - parem
@@ -110,44 +110,44 @@ class StateHandler:
                 self.robot.move(s1, s2, s3)
             elif kp.size < 60:
                 if x_loc < (HALF_WIDTH - 15):
-                    self.robot.spinLeft()
+                    self.robot.spin_left()
                 elif x_loc >  (HALF_WIDTH + 15):
-                    self.robot.spinRight()
+                    self.robot.spin_right()
                 else:
-                    startTime = time.time()
-                    while time.time() - startTime < 1:
+                    start_time = time.time()
+                    while time.time() - start_time < 1:
                         self.robot.move(0, 20, -20)
-                    self.setState(State.THROW_GOAL)
+                    self.set_state(State.THROW_GOAL)
             else:
                 self.robot.backward()
 
 
     def state_throw_to_goal(self):
-        if time.time() - self.stateStartTime > 5:
-            self.setState(State.BALL)
-        thresholded = self.createThresImgForBlobDetection(self.poleThresholder)
+        if time.time() - self.state_start_time > 5:
+            self.set_state(State.BALL)
+        thresholded = self.create_thres_img_for_blob_detection(self.pole_thresholder)
         cv2.imshow("Pole thresholded", thresholded)
-        poleKeypoints = list(self.poleDetector.detect(thresholded))
-        self.frameHSV = cv2.drawKeypoints(self.frameHSV, poleKeypoints, np.array([]), (255, 0, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-        if len(poleKeypoints) == 0:
-            self.orbitLeft(self.robot, 15, 0.57)
+        pole_keypoints = list(self.pole_detector.detect(thresholded))
+        self.frame_hsv = cv2.drawKeypoints(self.frame_hsv, pole_keypoints, np.array([]), (255, 0, 0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        if len(pole_keypoints) == 0:
+            self.orbit_left(self.robot, 15, 0.57)
         else:
-            pole_kp = poleKeypoints[0]
+            pole_kp = pole_keypoints[0]
             x_loc = pole_kp.pt[0]
             loc = (int(x_loc), int(pole_kp.pt[1]))
             if x_loc < HALF_WIDTH - 8:
-                self.orbitRight(self.robot, 8, 0.57)
+                self.orbit_right(self.robot, 8, 0.57)
             elif x_loc > HALF_WIDTH + 8:
-                self.orbitLeft(self.robot, 8, 0.57)
+                self.orbit_left(self.robot, 8, 0.57)
             else:
-                self.robot.move(0, -20, 20, disableFailsafe=1)
-                self.delayCamera(0.25, self.cap)
-                self.goForward(self.cap, self.robot, self.poleThresholder, self.poleDetector)
-                self.setState(State.BALL)
+                self.robot.move(0, -20, 20, disable_failsafe=1)
+                self.delay_camera(0.25, self.cap)
+                self.go_forward(self.cap, self.robot, self.pole_thresholder, self.pole_detector)
+                self.set_state(State.BALL)
 
 
-    def createThresImgForBlobDetection(self, thresholder):
-        thresholded = cv2.inRange(self.frameHSV, thresholder.getLow(), thresholder.getHigh())
+    def create_thres_img_for_blob_detection(self, thresholder):
+        thresholded = cv2.inRange(self.frame_hsv, thresholder.get_low(), thresholder.get_high())
         thresholded = 255 - thresholded
         sh = thresholded.shape
         return cv2.rectangle(thresholded, (0, 0), (sh[1], sh[0]), (255), 1)

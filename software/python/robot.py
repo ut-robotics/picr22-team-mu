@@ -8,7 +8,7 @@ class Robot:
         self.speed = 5 / 32767
 
 
-    def setSpeed(self, speed):
+    def set_speed(self, speed):
         self.speed = speed
 
 
@@ -53,12 +53,12 @@ class Robot:
         self.move(speed1, speed2, speed3)
 
     
-    def spinLeft(self):
+    def spin_left(self):
         speed = int(self.speed * 32767)
         self.move(speed, speed, speed)
 
 
-    def spinRight(self):
+    def spin_right(self):
         speed = int(self.speed * 32767)
         self.move(-speed, -speed, -speed)
 
@@ -67,18 +67,18 @@ class Robot:
     # speed2 - parem
     # speed3 - vasak
     # motor range - 48-2047
-    def move(self, speed1 : int, speed2 : int, speed3 : int, throwerSpeed=0, disableFailsafe=0, delimiter=0xAAAA) -> None:
-        print(speed1, speed2, speed3, throwerSpeed)
-        self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, throwerSpeed, disableFailsafe, delimiter))
+    def move(self, speed1 : int, speed2 : int, speed3 : int, thrower_speed=0, disable_failsafe=0, delimiter=0xAAAA) -> None:
+        print(speed1, speed2, speed3, thrower_speed)
+        self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, thrower_speed, disable_failsafe, delimiter))
         # self.ser.write(bytes(bytearray.fromhex('100010001000000000AAAA')))
 
 
 if __name__ == "__main__":
     import time
     r = Robot()
-    startTime = time.time()
+    start_time = time.time()
     while True:
         #r.orbit(0.5, forward=False, left=False)
         i = int(input(">"))
         #r.move(10, 10, 10) # liigub paremale
-        r.move(i, i, i, 0, disableFailsafe=1)
+        r.move(i, i, i, 0, disable_failsafe=1)

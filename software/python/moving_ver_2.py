@@ -14,7 +14,7 @@ class Robot:
         ]
 
 
-    def setSpeed(self, speed):
+    def set_speed(self, speed):
         self.speed = speed
 
 
@@ -44,9 +44,9 @@ class Robot:
     # speed1 - tagumine
     # speed2 - parem
     # speed3 - vasak
-    def set_speed(self, speed1 : int, speed2 : int, speed3 : int, throwerSpeed=0, disableFailsafe=0, delimiter=0xAAAA) -> None:
+    def set_speed(self, speed1 : int, speed2 : int, speed3 : int, thrower_speed=0, disable_failsafe=0, delimiter=0xAAAA) -> None:
         #print(speed1, speed2, speed3)
-        self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, throwerSpeed, disableFailsafe, delimiter))
+        self.ser.write(struct.pack("<hhhHBH", speed1, speed2, speed3, thrower_speed, disable_failsafe, delimiter))
         # self.ser.write(bytes(bytearray.fromhex('100010001000000000AAAA')))
 
     # radiaanides!!
@@ -59,6 +59,6 @@ class Robot:
 if __name__ == "__main__":
     import time
     r = Robot()
-    startTime = time.time()
-    while time.time() - startTime < 2:
+    start_time = time.time()
+    while time.time() - start_time < 2:
         r.move(0, 0, -3, r.motors)

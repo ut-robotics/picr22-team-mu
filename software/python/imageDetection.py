@@ -89,11 +89,11 @@ class FileThresholder(Thresholder):
         self.reload()
     
 
-    def getLow(self):
+    def get_low(self):
         return self.low
 
 
-    def getHigh(self):
+    def get_high(self):
         return self.high
 
     
@@ -105,61 +105,61 @@ class FileThresholder(Thresholder):
                 
     
     def save(self):
-        currentFile = {}
+        current_file = {}
         with open(self.path, 'r') as f:
-            currentFile = json.load(f)
+            current_file = json.load(f)
         
-        currentFile[self.mode]["high"] = self.getHigh().tolist()
-        currentFile[self.mode]["low"] = self.getLow().tolist()
+        current_file[self.mode]["high"] = self.get_high().tolist()
+        current_file[self.mode]["low"] = self.get_low().tolist()
         with open(self.path, "w") as f:
-            json.dump(currentFile, f)
+            json.dump(current_file, f)
 
 
 class EditableThresholder(Thresholder):
-    def __init__(self, mode="rgb", fileThresholder: FileThresholder = None, name = "Thresholder"):
+    def __init__(self, mode="rgb", file_thresholder: FileThresholder = None, name = "Thresholder"):
         super().__init__(mode)
-        self.fileThresholder = fileThresholder
-        if fileThresholder == None:
+        self.file_thresholder = file_thresholder
+        if file_thresholder == None:
             self.low = np.array([0, 0, 0])
             self.high = np.array([255, 255, 255])
         else:
-            self.low = fileThresholder.getLow()
-            self.high = fileThresholder.getHigh()
+            self.low = file_thresholder.get_low()
+            self.high = file_thresholder.get_high()
 
         cv2.namedWindow(name)
-        cv2.createTrackbar(f"low {self.mode[0].upper()}", name, self.low[0], 255, lambda x: self.changeValue("l", 0, x))
-        cv2.createTrackbar(f"low {self.mode[1].upper()}", name, self.low[1], 255, lambda x: self.changeValue("l", 1, x))
-        cv2.createTrackbar(f"low {self.mode[2].upper()}", name, self.low[2], 255, lambda x: self.changeValue("l", 2, x))
-        cv2.createTrackbar(f"high {self.mode[0].upper()}", name, self.high[0], 255, lambda x: self.changeValue("h", 0, x))
-        cv2.createTrackbar(f"high {self.mode[1].upper()}", name, self.high[1], 255, lambda x: self.changeValue("h", 1, x))
-        cv2.createTrackbar(f"high {self.mode[2].upper()}", name, self.high[2], 255, lambda x: self.changeValue("h", 2, x))
+        cv2.createTrackbar(f"low {self.mode[0].upper()}", name, self.low[0], 255, lambda x: self.change_value("l", 0, x))
+        cv2.createTrackbar(f"low {self.mode[1].upper()}", name, self.low[1], 255, lambda x: self.change_value("l", 1, x))
+        cv2.createTrackbar(f"low {self.mode[2].upper()}", name, self.low[2], 255, lambda x: self.change_value("l", 2, x))
+        cv2.createTrackbar(f"high {self.mode[0].upper()}", name, self.high[0], 255, lambda x: self.change_value("h", 0, x))
+        cv2.createTrackbar(f"high {self.mode[1].upper()}", name, self.high[1], 255, lambda x: self.change_value("h", 1, x))
+        cv2.createTrackbar(f"high {self.mode[2].upper()}", name, self.high[2], 255, lambda x: self.change_value("h", 2, x))
 
 
-    def getLow(self):
+    def get_low(self):
         return self.low
 
 
-    def getHigh(self):
+    def get_high(self):
         return self.high
 
 
     def reload(self):
-        if self.fileThresholder != None:
-            self.fileThresholder.reload()
-            self.low = self.fileThresholder.getLow()
-            self.high = self.fileThresholder.getHigh()
+        if self.file_thresholder != None:
+            self.file_thresholder.reload()
+            self.low = self.file_thresholder.get_low()
+            self.high = self.file_thresholder.get_high()
         else:
             self.low = np.array([0, 0, 0])
             self.high = np.array([255, 255, 255])
 
     def save(self):
-        if self.fileThresholder != None:
-            self.fileThresholder.high = self.getHigh()
-            self.fileThresholder.low = self.getLow()   
-            self.fileThresholder.save()
+        if self.file_thresholder != None:
+            self.file_thresholder.high = self.get_high()
+            self.file_thresholder.low = self.get_low()   
+            self.file_thresholder.save()
 
     
-    def changeValue(self, lh, i, x):
+    def change_value(self, lh, i, x):
         if lh == 'l':
             self.low[i] = x
         elif lh == 'h':
@@ -169,13 +169,13 @@ class EditableThresholder(Thresholder):
         
 
 def main():
-    e = EditableThresholder(fileThresholder=FileThresholder(path="thres.json"))
+    e = EditableThresholder(file_thresholder=FileThresholder(path="thres.json"))
     cap = RealsenseCamera()
     while True:
         frame = cap.get_color_frame()
-        frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         
-        cv2.imshow("Window", frameHSV)
+        cv2.imshow("Window", frame_hsv)
         if cv2.waitKey(1) == ord('q') & 0xFF:
             e.save()
             break

@@ -126,15 +126,6 @@ def get_thrower_speed(distance):
     return int(0.397 * distance + 221)
 
 
-def delay_camera(dt, cam):
-    start_time = time.time()
-    while time.time() < start_time + dt:
-        frame, depth_frame = cam.get_frames()
-    
-    lastFrame, depth_frame = cam.get_frames()
-    return lastFrame
-
-
 def go_forward(cap, robot, pole_thresholder, pole_detector):
     start_time = time.time()
     s1 = 0
@@ -207,7 +198,7 @@ def main(controller=False, robot = Robot(), basket = Basket.MAGENTA):
         opp_basket = Basket.MAGENTA
     opp_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV, path=f"{opp_basket.value}.json"), name="OPP pole")
     
-    STATE = StateHandler(cap, robot, opp_thresholder, pole_thresholder, ball_thresholder, ball_detector, pole_detector, map_to_max, orbit_left, orbit_right, delay_camera, go_forward)
+    STATE = StateHandler(cap, robot, opp_thresholder, pole_thresholder, ball_thresholder, ball_detector, pole_detector, map_to_max, orbit_left, orbit_right, go_forward)
     while True:
         if controller:
             yield

@@ -45,7 +45,7 @@ def get_ball_blob_detector_params():
     blob_detector_params = cv2.SimpleBlobDetector_Params()
 
     blob_detector_params.filterByArea = True
-    blob_detector_params.maxArea = 4500
+    blob_detector_params.maxArea = 10000
     blob_detector_params.minArea = 75
 
     blob_detector_params.filterByCircularity = True
@@ -68,7 +68,7 @@ def get_pole_blob_detector_params():
 
     blob_detector_params.filterByArea = True
     blob_detector_params.maxArea = 600000
-    blob_detector_params.minArea = 1000
+    blob_detector_params.minArea = 500
 
     blob_detector_params.filterByCircularity = True
     blob_detector_params.maxCircularity = 1
@@ -204,7 +204,7 @@ def main(controller=False, robot = Robot(), basket = Basket.MAGENTA):
         opp_basket = Basket.MAGENTA
     opp_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV, path=f"{opp_basket.value}.json"), name="OPP pole")
     
-    STATE = StateHandler(cap, robot, opp_thresholder, pole_thresholder, ball_thresholder, ball_detector, pole_detector, map_to_max, orbit_left, orbit_right, go_forward)
+    STATE = StateHandler(cap, robot, opp_thresholder, pole_thresholder, ball_thresholder, ball_detector, pole_detector, map_to_max, orbit_left, orbit_right)
     while True:
         if controller:
             yield
@@ -218,7 +218,7 @@ def main(controller=False, robot = Robot(), basket = Basket.MAGENTA):
     yield
 
 
-def thresh(basket = Basket.MAGENTA):
+def thresh(basket = Basket.BLUE):
     cap = RealsenseCamera()
     ball_thresholder = EditableThresholder(Mode.HSV, FileThresholder(mode=Mode.HSV), name="Ball")
     ball_detector = cv2.SimpleBlobDetector_create(get_ball_blob_detector_params())
@@ -266,5 +266,5 @@ if __name__ == "__main__":
     # r = Robot()
     # while time.time() - start_time < 10:
     #     oribtRight(r, 35, 0.57)
-    # thresh()
+    #thresh()
     next(main(basket=Basket.BLUE))

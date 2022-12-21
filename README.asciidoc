@@ -99,8 +99,48 @@
 
 [cols="1,1,1,1"]
 |===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+
 |02.10
 |Started with electronics schematics. 2h
 |
 |
+
+|10.10
+|Designing schematics. 1.5h
+|Mainboard communication, image detection, omniwheel motion. 5h
+|Camera mount design. Lost due to Fusion error. 4h
+
+|15.10
+|Designing schematics. 1.5h
+|
+|
+
+|23.10
+|Electronics design. 4h
+|
+|
+
+|24.10
+|Electronics design. 1.5h
+|Programming. 1.5h
+|Design of thrower. 1.5h
+
+|28.10
+|Thrower motor, bottom plate. 3h
+|
+|Fabrication of test robot thrower. 1.5h
+
+|30.10
+|Electronics design. 5h
+|Measuring thrower. 2.5h
+|Measuring thrower. 2.5h
+
+|31.10
+|Electronics design. 5h
+|Reinstalling OS, configure. 3h
+|Movement and vision math. 1.5h
 |===

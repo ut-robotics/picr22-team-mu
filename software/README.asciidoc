@@ -1,0 +1,10 @@
+= Software
+
+== How to connect VNC
+
+. Ava vncühendus robotiga.
+. Kui robot ei ole võrgus / ei saa debuggida kuidagi, siis ühenda kaabliga, jaga võrku, kasuta `sudo arp-scan --interface enp0s31f6 --localnet` ja ühenda üle ssh.
+
+== Remote control
+
+. `ssh -L 4200:127.0.0.1:4200 robot@192.168.3.70`, siis saad enda arvutist ligi :4200 kaudu remote control'ile.

@@ -18,11 +18,17 @@ Fusion 360 link: https://a360.co/3NJoPO6
 
 See software/README.asciidoc
 
+=== Electronics
+
+See Electronics branch electronics/README.asciidoc
+
 === Mechanics
 
 The main philosophy of the mechanics was to make things as simple as possible. If a part is not needed, delete it. Another choice that was made during the mechanics design process was to make so one could remove any subassembly without disassembling the entire robot.
 
 In light of these requirements our robot made heavy use of threaded inserts and 3D printed parts.
+
+image::my.jpg[]
 
 ==== The thrower
 

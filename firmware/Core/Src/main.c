@@ -77,7 +77,6 @@ typedef struct Command {
   int16_t speed2;
   int16_t speed3;
   uint16_t throwerSpeed;
-  //uint8_t noStop;
   uint16_t delimiter;
 } Command;
 
@@ -264,8 +263,6 @@ int main(void)
 	  motor_enabled = 1;
 	  nSleep();
 
-	  //HAL_GPIO_TogglePin(BLUE_LED_GPIO_Port, BLUE_LED_Pin); // (3)
-	  //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_3);
 	  motor1Control.speed = command.speed1;
 	  motor2Control.speed = command.speed2;
 	  motor3Control.speed = command.speed3;

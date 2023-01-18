@@ -1,0 +1,59 @@
+= Electronics 
+
+== Functionality
+
+This board has two sides that have separate power and ground and are iseolated from one another with isolators.
+Microcontroller is powered by 5 V USB connector that is stepped down to 3.3 V by voltage regulator.
+Microcontroller is programmed through programmer connector and can communicate through USB connector.
+The motor drivers are powerd by 4s LiPo battery that is stepped down to 5V by buck converter.
+The motor drivers are controlled by direction and PWM signal.
+
+== Pinout
+
+=== Programmer connector
+
+. VCC 3V3
+. SwDIO
+. GND
+. SWCLK
+. GND
+. NC
+. NC
+. NC
+. GND
+. NRST
+
+=== Motor Encoder connectors
+
+. GND
+. VCC 3V3
+. Mx ENC B
+. Mx ENC A
+
+=== Thrower ESC connector
+
+. BGND
+. THR ESC B
+. NC
+. NC
+
+=== Ball holding servo connector
+
+. NC
+. BGND
+. THR SERVO B
+. BAT 5V
+
+=== Thrower angle servo connector
+
+. NC
+. BGND
+. THR ANGLE B
+. BAT 5V
+
+=== IR Sensor connector
+
+. VCC 5V
+. IR SENSOR
+. GND
+. IR LED

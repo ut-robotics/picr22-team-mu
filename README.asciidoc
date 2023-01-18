@@ -33,6 +33,51 @@ Also to take part of the lab sessions.
 For instructors I'd recommend to have individual meetings / presenting the tasks with the team.
 That would help to find planning errors earlier and would lessen the amount of work in the end of the semester.
 
+=== Leonid
+
+It was cool working on this kind of project.
+I learned that there is never enough time to make things in the optimal manner, there was always crunch and because of that I had to make many questionable decisions.
+In the beginning I was quite flamboyant, as I have done decent amount of CAD and 3D printing before, but things took time and at some point the time was gone.
+So for the students reading: you can get fancy AFTER your MVP is working. 
+
+For the instructors: the glue is a legitimate way of attaching two parts together.
+It is used widely in many high tolerance fields, including but not limited to aerospace.
+Also there is much to be said for measurementless manufacturing.
+It is often faster and better than doing everything in CAD.
+The most creative time in designing the robot came after all of the CAD and CAM was done and I had to fix the issues I didn't foresee.
+
+All in all it was one of the most creative courses I have taken. It was a great deal of fun even if our robot did't quite work in the end.
+
+== Mechanics
+
+The main philosophy of the mechanics was to make things as simple as possible. If a part is not needed, delete it. Another choice that was made during the mechanics design process was to make so one could remove any subassembly without disassembling the entire robot.
+
+In light of these requirements our robot made heavy use of threaded inserts and 3D printed parts.
+
+=== The thrower
+
+The thrower was mainly 3D printed. I would encourage any thrower designer to make the test robot thrower without milled parts and try to finish the test robot thrower as soon as possible.
+
+Few ideas/ observations: 
+
+1. Add a curved section of the tracks after the motor where the ball does not touch the motor. 
+2. Think very carefully about the initial ball alignment. If possible make the hopper feeding the thrower as long as possible. If the ball gets in contact with the motor while being crooked, it will fly crooked.
+3. It is easier to design the thrower from the front with revolve tool
+4. If the rails are too far apart the same motor rpm achieves smaller ball speed. 
+5. Maybe put some rollers on the track so it would be easier for the ball to center itself.
+
+=== The good
+
+The robot came out quite compact. The 3D printed motor mounts work well. The heat inserts are very much worth it. I didn't need to tap a single hole. The flexure battery mounts almost worked, they were a tad too thin and prone to breaking.
+
+=== The bad
+
+The minimalistic wheel bent. Use aluminium connection to the motor. The wiring was a total nightmare. Making the robot too compact makes the wiring be a total mess. The wires always take up more volume than you think. Also the camera mount was flimsy.
+
+=== The ugly
+
+Again, wiring... Communicate better with your electronics person.
+
 == Blog
 
 === September

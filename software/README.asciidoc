@@ -1,0 +1,78 @@
+= Software documentation
+
+Created by Rasmus Saame {docdate}
+
+== Setting up
+
+* Install Python, Pip, Node.js and npm
+* Install all of the required libraries
+* Start the `python/controller.py` script that waits for the remote control application
+* Start the `webserver/server.js` server that waits for the referee command or user input and gives the main code the needed commands
+
+== Libraries 
+
+Our code uses the following Python libraries:
+
+* **pyrealsense2** - for acquiring depth and image data from the camera
+* **numpy** -  for all kinds of numerical and mathematical operations related to calculating different locations and parameters
+* **cv2** - for image processing
+* **enum** - for creating Enumarable objects that are used to improve the readability of the code
+* **time** - for creating small delays in the code for the robot to move or to switch states after a certain amount of time.
+* **socket** - for communicating with the remote controller
+* **json** - for storing threshold values and communicating with remote controller
+* **struct** - for packing motor speeds as bytes to send them to the microcontroller
+* **scipy** - for regression to find the motor speeds for different distances.
+
+In addition our remote controller uses the following Javascript libraries / frameworks:
+
+* **Vue.js** - framework for main remote control webpage
+* **express.js** - for remote control backend that receives user input from the webpage
+* **path** - for serving static webpage files to the client
+* **bodyParser** - for parsing client JSON requests.
+* **net** - for communicating with our main code.
+* **websocket** - for communicating with the referee.
+
+== Description of game logic
+
+Our robot's first goal is to find a ball that it can throw in to the basket.
+After it has found the ball, it drives towards it and stop at a certain distance.
+Then it orbits the ball using omni-motion to locate opponents basket.
+After the robot has located both the basket and the goal, it centers both of those in the screen for final approach.
+Then robot starts the motor with the correct speed depending on the distance to the goal and starts approaching the ball.
+Robot changes the speed as the pole gets closer for more accurate throw.
+After the throw the robot starts looking for a new ball.
+
+== Block diagram of game logic
+
+image::state diagram.png[]
+
+== Connecting with our current robot
+
+Our robot's IP-address in the pwir network has been for the duration of the course 192.168.3.70.
+Recommended way to connect with the robot is through VNC (for example Remmina software) or through SSH.
+Robot's HDMI port has been disabled for VNC, we had problems with both of them working simultaneously.
+
+=== What to do if the robot's IP-address changes?
+
+. Connect a network cable to the robot and your computer.
+. Make your computer to forward the Ethernet port.
+. Use ARP-scan on the Ethernet network to find the robot's IP-address in the Ethernet network.
+. Use either SSH or VNC to connect to the robot.
+. Either reconnect the robot to the wifi or note the new IP address of the robot.
+
+=== Remote control
+
+For accessing our remote control functionality you have to set up an SSH port forwarding to localhost port 4200.
+Our remote controller uses this port for a web interface where user can easily control the robot.
+
+For example you could run the following command `ssh -L 4200:127.0.0.1:4200 robot@192.168.3.70`, and then open up in your browser http://localhost:4200.
+
+== Reflections
+
+I would've liked to use the given image detection classes because those are more efficient and faster.
+Unfortunately I started with my own implementation for image detection and didn't have the time to transition to the given image detection glasses from the boot camp.
+
+Also I would've liked to organize everything little bit more: code and also the development steps and time usage.
+Unfortunately I had a really busy semester and couldn't participate in this course for as much as I would've liked.
+
+Also I would've liked if I'd started using omni-motion little bit more early in the semester. That way later in the semester I wouldn't have have to change all of our code from simple movement to omni-motion.

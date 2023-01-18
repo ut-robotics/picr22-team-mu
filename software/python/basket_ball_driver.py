@@ -19,19 +19,6 @@ def find_goal_location(thresd, top_width_threshold = 10, bottom_width_threshold 
                 y_bottom = i
                 break
         
-        if kas_plot_x or kas_plot_y:
-            import matplotlib.pyplot as plt
-
-        if kas_plot_y:
-            plt.plot(range(len(sums)), sums)  
-            plt.scatter([y_bottom], [sums[y_bottom]] , color = "r")
-            plt.show()
-        
-        if kas_plot_x:
-            plt.plot(range(len(thresd[0])), 255-thresd[0])  
-            plt.scatter([np.sum((255-thresd[0])*np.array(range(len(thresd[0]))))/sum((255-thresd[0]))], [255] , color = "r")
-            plt.show()
-        
         return y_bottom
     else:
         return None

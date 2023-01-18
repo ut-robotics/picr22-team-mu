@@ -63,6 +63,15 @@ Also to take part of the lab sessions.
 For instructors I'd recommend to have individual meetings / presenting the tasks with the team.
 That would help to find planning errors earlier and would lessen the amount of work in the end of the semester.
 
+=== Michelle
+
+I mainly worked on our robot's electronics. 
+I came to the course a little too confident in my electronics skills and that lead to underestimating the time it takes to complete each task. 
+Next year I would start earlier and have more teammeetings to organize our work better and discover potential problems early. Furthermore I recommend having common working hours for the group, because it enables to solve problems that combine mechanics, electronics and programming knowledge faster.
+For the future students I recommend talking to instructors as much as you can. This allows to generate better ideas about your design and spot the problems early so you can make the best possible robot.
+For the instuctors I would recommend taking more about the different solutions that past years students have come up with. Would have really enjoyed learning more about the courses hisory and this would allow to make better designs each year.
+I really like how practical this course is and how it gives you more opportunities to be creative compared to other courses.
+
 === Leonid
 
 It was cool working on this kind of project.

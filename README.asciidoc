@@ -12,6 +12,27 @@
 
 Fusion 360 link: https://a360.co/3NJoPO6
 
+== Documentation
+
+=== Programming
+
+See software/README.asciidoc
+
+== Personal comments
+
+=== Rasmus
+
+I worked mostly on programming tasks.
+Some times I also helped Michelle and Leonid with their tasks if it was blocking my progress.
+I learned about the basketball rules and how to build a bigger Python program in a readable way.
+Next I'd allocate more time for the course and start with things more earlier in the course.
+Also I'd use more of the given code not wanting to do everything myself.
+I liked working together with my teammates on the robot and bouncing ideas how to solve some programming challenges.
+For next year students I'd recommend to start early in the course with presenting the tasks because they will not have enough time in the end of the course.
+Also to take part of the lab sessions.
+For instructors I'd recommend to have individual meetings / presenting the tasks with the team.
+That would help to find planning errors earlier and would lessen the amount of work in the end of the semester.
+
 == Blog
 
 === September

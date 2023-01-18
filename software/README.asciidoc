@@ -74,5 +74,3 @@ Unfortunately I started with my own implementation for image detection and didn'
 
 Also I would've liked to organize everything little bit more: code and also the development steps and time usage.
 Unfortunately I had a really busy semester and couldn't participate in this course for as much as I would've liked.
-
-Also I would've liked if I'd started using omni-motion little bit more early in the semester. That way later in the semester I wouldn't have have to change all of our code from simple movement to omni-motion.

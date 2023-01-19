@@ -20,7 +20,24 @@ See software/README.asciidoc
 
 === Electronics
 
-See Electronics branch electronics/README.asciidoc
+The main idea behind the electronics disain was to make our board fit well with our robot's mechanical components and to give the programmer as much functionality as possible.
+For mechanics part I consulted with our mechanic to allocate space for pcb in his design and get the PCB outline from .dxf file. 
+To enable better control over the robot I added connectors for IR sensor and servos for changing thrower angle and holding the ball.
+
+[cols="a,a", frame=none, grid=none]
+|===
+| image::PCB_top3D.JPG[]
+| image::PCB_top2D.JPG[]
+|===
+
+==== The good
+. No hacks were needed on board, other than a LED for better debugging (that can be removed).
+. Even though the board could use a few revisions to try out some other design ideas and make it more compact, I am rather satisfied with the solution.
+
+==== The bad
+. USB connector and some wire placement weren't discussed well enough with our mechanic, so one part of the battery holder had to be removed when attaching the board.
+. The wire pads should have been larger for more comfortable soldering experience.
+. Since I focused more on the board the cable management was a mess.
 
 === Mechanics
 

@@ -2,6 +2,98 @@
 
 = Team "Väike My" in PiCR 2022/23
 
+== Members
+
+. Rasmus Saame
+. Michelle Lukken
+. Leonid Zinatullin
+
+== Links
+
+Fusion 360 link: https://a360.co/3HeGZ8V
+
+== Documentation
+
+=== Programming
+
+See software/README.asciidoc
+
+=== Electronics
+
+See Electronics branch electronics/README.asciidoc
+
+=== Mechanics
+
+The main philosophy of the mechanics was to make things as simple as possible. If a part is not needed, delete it. Another choice that was made during the mechanics design process was to make so one could remove any subassembly without disassembling the entire robot.
+
+In light of these requirements our robot made heavy use of threaded inserts and 3D printed parts.
+
+image::my.jpg[]
+
+==== The thrower
+
+The thrower was mainly 3D printed. I would encourage any thrower designer to make the test robot thrower without milled parts and try to finish the test robot thrower as soon as possible.
+
+Few ideas/ observations: 
+
+1. Add a curved section of the tracks after the motor where the ball does not touch the motor. 
+2. Think very carefully about the initial ball alignment. If possible make the hopper feeding the thrower as long as possible. If the ball gets in contact with the motor while being crooked, it will fly crooked.
+3. It is easier to design the thrower from the front with revolve tool
+4. If the rails are too far apart the same motor rpm achieves smaller ball speed. 
+5. Maybe put some rollers on the track so it would be easier for the ball to center itself.
+
+==== The good
+
+The robot came out quite compact. The 3D printed motor mounts work well. The heat inserts are very much worth it. I didn't need to tap a single hole. The flexure battery mounts almost worked, they were a tad too thin and prone to breaking.
+
+==== The bad
+
+The minimalistic wheel bent. Use aluminium connection to the motor. The wiring was a total nightmare. Making the robot too compact makes the wiring be a total mess. The wires always take up more volume than you think. Also the camera mount was flimsy.
+
+==== The ugly
+
+Again, wiring... Communicate better with your electronics person.
+
+== Personal comments
+
+=== Rasmus
+
+I worked mostly on programming tasks.
+Some times I also helped Michelle and Leonid with their tasks if it was blocking my progress.
+I learned about the basketball rules and how to build a bigger Python program in a readable way.
+Next I'd allocate more time for the course and start with things more earlier in the course.
+Also I'd use more of the given code not wanting to do everything myself.
+I liked working together with my teammates on the robot and bouncing ideas how to solve some programming challenges.
+For next year students I'd recommend to start early in the course with presenting the tasks because they will not have enough time in the end of the course.
+Also to take part of the lab sessions.
+For instructors I'd recommend to have individual meetings / presenting the tasks with the team.
+That would help to find planning errors earlier and would lessen the amount of work in the end of the semester.
+
+=== Michelle
+
+I mainly worked on our robot's electronics. 
+I came to the course a little too confident in my electronics skills and that lead to underestimating the time it takes to complete each task. 
+Next year I would start earlier and have more teammeetings to organize our work better and discover potential problems early. Furthermore I recommend having common working hours for the group, because it enables to solve problems that combine mechanics, electronics and programming knowledge faster.
+For the future students I recommend talking to instructors as much as you can. This allows to generate better ideas about your design and spot the problems early so you can make the best possible robot.
+For the instuctors I would recommend taking more about the different solutions that past years students have come up with. Would have really enjoyed learning more about the courses hisory and this would allow to make better designs each year.
+I really like how practical this course is and how it gives you more opportunities to be creative compared to other courses.
+
+=== Leonid
+
+It was cool working on this kind of project.
+I learned that there is never enough time to make things in the optimal manner, there was always crunch and because of that I had to make many questionable decisions.
+In the beginning I was quite flamboyant, as I have done decent amount of CAD and 3D printing before, but things took time and at some point the time was gone.
+So for the students reading: you can get fancy AFTER your MVP is working. 
+
+For the instructors: the glue is a legitimate way of attaching two parts together.
+It is used widely in many high tolerance fields, including but not limited to aerospace.
+Also there is much to be said for measurementless manufacturing.
+It is often faster and better than doing everything in CAD.
+The most creative time in designing the robot came after all of the CAD and CAM was done and I had to fix the issues I didn't foresee.
+
+All in all it was one of the most creative courses I have taken. It was a great deal of fun even if our robot did't quite work in the end.
+
+
 == Blog
 
 === September
@@ -95,8 +187,6 @@
 
 === October
 
-10-12h cad 
-
 [cols="1,1,1,1"]
 |===
 |*Date*
@@ -143,4 +233,142 @@
 |Electronics design. 5h
 |Reinstalling OS, configure. 3h
 |Movement and vision math. 1.5h
+|===
+
+
+=== November
+
+[cols="1,1,1,1"]
+|===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+
+|05.11
+|
+|Programming 5h
+|
+
+|06.11
+|Fixing problems related to footprints 3h
+|Programming 4h
+|Programming 8h
+
+|07.11
+|Helping with mechanics and thinking movement logic 5h
+|Programming 4h
+|Programming 4h
+
+|08.11
+|
+|Programming 6h
+|
+
+|09.11
+|
+|Programming 2h
+|
+
+|10.11
+|Preparations for test competition 2.5h
+|Programming, test competition 2.5h
+|Design 0.5h
+
+|14.11
+|Finishing schematics. PCB design 4h
+|Programming 1.25h
+|Design 2h
+
+|19.11
+|
+|Programming 6.5h
+|Programming 6.5h
+
+|20.11
+|Robot controller, first look at issues 4h
+|Programming 6.25h
+|
+
+|21.11
+|fixing smaller issues, researching bigger issues 1.5h
+|Programming 6h
+|
+
+|24.11
+|prepping for competition 3h
+|prepping, test competition 3h
+|
+
+|27.11
+|fixing issues 1h
+|
+|
+
+|28.11
+|fixing issues 2h. component placement on pcb and routing subschematics 7.5h
+|
+|
+
+|29.11
+|figuring out how to place isolation and component placement approved by mechanic 7.5h 
+|
+|
+
+|===
+
+=== December
+
+[cols="1,1,1,1"]
+|===
+|*Date*
+|*Michelle*
+|*Rasmus*
+|*Leonid*
+
+|01.12
+|finishing first version of pcb design 4h
+|
+|finishing design and sending it for grading (7h)
+
+|03.12
+|implementing pcb feedback 7h
+|
+|
+
+|04.12
+|fixing last pcb issues 3.5h  
+|
+|creating CAM, adjusting design. Printing some pieces (6h)
+
+|05.12
+|
+|
+|finalizing robot design based on feedback (3h)
+
+|07.12
+|
+|
+|making adjustments to CAM based on feedback. (1h)
+
+|08.12
+|
+|
+|final CAM adjustments, milling robot pieces. (4.5h)
+
+|09.12
+|
+|
+|cleaning milled pieces, attaching threaded inserts, transfering motors from test robot (6h)
+
+|10.12
+|
+|
+|printing of second thrower iteration, battery holders with battery protectors and battery connectors. Assembly of the chassis and camera mount. (8h)
+
+|11.12
+|figuring out how to attach old electronics to new robot 7.5h
+|Rewriting solution code and cleaning up ugly code. 6h
+|finilizing the assembly, 3D printing of the last pieces. Attaching thrower and camera mount. Attaching electronics, cable management (10h)
+
 |===

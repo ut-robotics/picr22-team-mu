@@ -39,6 +39,8 @@ To enable better control over the robot I added connectors for IR sensor and ser
 . The wire pads should have been larger for more comfortable soldering experience.
 . Since I focused more on the board the cable management was a mess.
 
+image::robot_bottom_view.jpg[]
+
 === Mechanics
 
 The main philosophy of the mechanics was to make things as simple as possible. If a part is not needed, delete it. Another choice that was made during the mechanics design process was to make so one could remove any subassembly without disassembling the entire robot.

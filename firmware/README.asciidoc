@@ -1,0 +1,27 @@
+= Firmware
+
+== Functionality
+
+This firmware is used on μ mainboard and motor driver board.
+It generates PWM signals for moving 3 gearmotors for wheels and a brushless motor for throwing.
+Wheel motors are controlled with PI algorithm by using feedback from encoders.
+
+
+== Data format
+
+The data can be sent and recieved in the following format:
+
+. 16-bit motor1 speed
+. 16-bit motor2 speed
+. 16-bit motor3 speed
+. 16-bit thrower speed
+. 16-bit delimiter
+
+All the data is sent in little endian byte order.
+Thrower values range from 1000 to 2000.
+That means the thrower is static at 1000 and maximally mobile at 2000.
+Disable failsafe mode is always on so new input must be sent at least every 1 second to keep the robot moving.
+Delimeter must be 0xAAAA. +
+
+Example: 0A 00 0A 00 0A 00 14 05 AA AA +
+All wheels are rotating with the speed of 10 and thrower speed of 1300. 

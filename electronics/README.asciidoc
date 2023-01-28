@@ -5,12 +5,16 @@
 This board has two sides that have separate power and ground and are iseolated from one another with isolators.
 Microcontroller is powered by 5 V USB connector that is stepped down to 3.3 V by voltage regulator.
 Microcontroller is programmed through programmer connector and can communicate through USB connector.
+The board uses motor drivers to control 3 Pololu metal gearmotors that get feedback from 64 CPR encoders from mainboard side.
 The motor drivers are powerd by 4s LiPo battery that is stepped down to 5V by buck converter.
 The motor drivers are controlled by direction and PWM signal.
+The motor drivers are configured at maximum output current of 2.7 A.
 
 == Pinout
 
-=== Programmer connector
+image::../PCB_top3D.JPG[]
+
+=== Programmer connector (J3)
 
 . VCC 3V3
 . SwDIO
@@ -23,35 +27,43 @@ The motor drivers are controlled by direction and PWM signal.
 . GND
 . NRST
 
-=== Motor Encoder connectors
+=== USB connector (J1)
+
+. VCC 5V
+. D-
+. D+
+. ID
+. GND
+
+=== Motor Encoder connectors (J2, J4, J5)
 
 . GND
 . VCC 3V3
 . Mx ENC B
 . Mx ENC A
 
-=== Thrower ESC connector
+=== Thrower ESC connector (J8)
 
 . BGND
 . THR ESC B
 . NC
 . NC
 
-=== Ball holding servo connector
+=== Ball holding servo connector (J7)
 
 . NC
 . BGND
 . THR SERVO B
 . BAT 5V
 
-=== Thrower angle servo connector
+=== Thrower angle servo connector (J9)
 
 . NC
 . BGND
 . THR ANGLE B
 . BAT 5V
 
-=== IR Sensor connector
+=== IR Sensor connector (J6)
 
 . VCC 5V
 . IR SENSOR
